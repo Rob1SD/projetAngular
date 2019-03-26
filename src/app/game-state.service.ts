@@ -18,11 +18,14 @@ export class GameStateService {
     this.StateClock = this.intervalStateFunc();
   }
 
+  //observer wich publish the current state of the game every seconds 
   private intervalStateFunc = () => interval(1000).pipe(
     map(() => this.CurrentState())
   );
 
+  //return the current state 
   public CurrentState = (): GameState => this.state;
 
+  //change the current state
   public ChangeState = (newState: GameState) => this.state = newState;
 }
