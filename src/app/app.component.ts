@@ -18,6 +18,7 @@ export class AppComponent {
       pokeservice.GetPokemonByName("mew"),
       pokeservice.GetPokemonByName("pikachu")
     ).subscribe(obsArray => {
+      console.log(obsArray[0])
       poke1 = new Pokemon(obsArray[0]);
       poke2 = new Pokemon(obsArray[1]);
       console.log(poke1);

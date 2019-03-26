@@ -1,27 +1,41 @@
 export class Pokemon {
-    nom: string;
-    speed: number;
-    attackDmg: number;
-    healthPoint: number;
-    totalHealthPoint: number;
-    // constructor(NOM, SPEED, ATTACKDMG, HEALTHPOINT) {
-    //     this.nom = NOM;
-    //     this.speed = SPEED;
-    //     this.attackDmg = ATTACKDMG;
-    //     this.healthPoint = HEALTHPOINT;
-    //    // console.log(this.nom);
-    // }
-    constructor(dataFromService) {
-        this.nom = dataFromService.name;
-        this.speed = dataFromService.stats[0].base_stat;
-        this.attackDmg = dataFromService.stats[4].base_stat;
-        this.totalHealthPoint = dataFromService.stats[5].base_stat * 10;
-        this.healthPoint = dataFromService.stats[5].base_stat * 10;
-       // console.log(this.nom);
-    }
-    attack(pokemon: Pokemon) {
-        pokemon.healthPoint = pokemon.healthPoint - this.attackDmg < 0 ? 0 : pokemon.healthPoint - this.attackDmg;
 
+    public nom: string;
+    public speed: number;
+    public attackDmg: number;
+    public healthPoint: number;
+    public totalHealthPoint: number;
+    public level: number;
+    public defense: number;
+
+
+    constructor(dataFromService) {
+      this.level = 1;
+      this.nom = dataFromService.name;
+      this.speed = dataFromService.stats[0].base_stat;
+      this.attackDmg = dataFromService.stats[4].base_stat;
+      this.totalHealthPoint = dataFromService.stats[5].base_stat;
+      this.healthPoint = dataFromService.stats[5].base_stat;
+      this.defense = dataFromService.stats[3].base_stat;
+      // console.log(this.nom);
+    }
+
+    attack(pokemon: Pokemon) {
+        this.Damage(pokemon);
+
+    }
+
+
+    private LevelMultiplier = (): number => (2*this.level) / 5 + 2;
+
+    private AttackDefenseRatio = (defense: number): number => this.attackDmg / defense; 
+
+    private CoreDamage = (target: Pokemon, power: number) => this.LevelMultiplier() * this.AttackDefenseRatio(target.defense) * power;
+
+    public Damage(target: Pokemon, attackPower: number = 30) {
+      const dmgTaken = this.CoreDamage(target, attackPower)/50 + 2;
+      const tmpHealth = Math.floor(target.healthPoint - dmgTaken);
+      target.healthPoint = tmpHealth > 0 ? tmpHealth : 0;
     }
 }
 
@@ -38,15 +52,15 @@ export async function fight(p1: Pokemon, p2: Pokemon) {
     let turn = 1;
     while (player1.healthPoint > 0 && player2.healthPoint > 0) {
         console.log('===================================================');
-        console.log('Tour : ' + turn)
+        console.log('Tour : ' + turn);
         console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
         console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
         await pause(player1, player2);
-        console.log(player1.nom + ' attaque ' + player2.nom)
+        console.log(player1.nom + ' attaque ' + player2.nom);
         console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
-            console.log(player2.nom + ' attaque ' + player1.nom)
+            console.log(player2.nom + ' attaque ' + player1.nom);
             console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
 
         }
