@@ -1,8 +1,12 @@
 export class Pokemon {
-    nom: string;
-    speed: number;
-    attackDmg: number;
-    healthPoint: number;
+    public nom: string;
+    public speed: number;
+    public attackDmg: number;
+    public healthPoint: number;
+    public level: number;
+    public defense: number;
+
+
     constructor(NOM, SPEED, ATTACKDMG, HEALTHPOINT) {
         this.nom = NOM;
         this.speed = SPEED;
@@ -10,10 +14,20 @@ export class Pokemon {
         this.healthPoint = HEALTHPOINT;
        // console.log(this.nom);
     }
+
     attack(pokemon: Pokemon) {
         pokemon.healthPoint = pokemon.healthPoint - this.attackDmg < 0 ? 0 : pokemon.healthPoint - this.attackDmg;
 
     }
+
+
+    private LevelMultiplier = (): number => (2*this.level) / 5 + 2;
+
+    private AttackDefenseRatio = (defense: number): number => this.attackDmg / defense; 
+
+    private CoreDamage = (target: Pokemon, power: number) => this.LevelMultiplier() * this.AttackDefenseRatio(target.defense) * power;
+
+    public Damage = (target: Pokemon, attackPower: number) => this.CoreDamage(target, attackPower)/50 + 2;
 }
 
 
