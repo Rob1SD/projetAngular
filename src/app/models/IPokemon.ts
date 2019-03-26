@@ -1,4 +1,4 @@
-interface IPokemon {
+export interface IPokemon {
     abilities: Ability[];
     base_experience: number;
     forms: NamedResource[];
