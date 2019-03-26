@@ -7,13 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BattleMenuComponent implements OnInit {
 
-  constructor() { }
+  public currentState: "Play" | "Pause";
+
+  constructor() {
+    this.currentState = "Play";
+   }
 
   ngOnInit() {
   }
 
   changeState() {
-    
+    if(this.currentState == "Play") this.currentState = "Pause"
+    else this.currentState = "Play";
   }
 
 }
