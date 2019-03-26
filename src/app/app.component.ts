@@ -9,6 +9,9 @@ import { IPokemon } from "./models/IPokemon";
 })
 export class AppComponent {
 
+  title = 'le meilleur pokemon arena, crée par Félix Alexandre, Pougetoux Jean et Soldé Robin';
+
+
   constructor(poke: PokemonService) {
     const unsub = poke.GetPokemonByName('ditto').subscribe( (data: IPokemon) => {
       console.log(data);
@@ -21,5 +24,4 @@ export class AppComponent {
     });
   }
 
-  title = 'pokemonArena';
 }
