@@ -3,11 +3,20 @@ export class Pokemon {
     speed: number;
     attackDmg: number;
     healthPoint: number;
-    constructor(NOM, SPEED, ATTACKDMG, HEALTHPOINT) {
-        this.nom = NOM;
-        this.speed = SPEED;
-        this.attackDmg = ATTACKDMG;
-        this.healthPoint = HEALTHPOINT;
+    totalHealthPoint: number;
+    // constructor(NOM, SPEED, ATTACKDMG, HEALTHPOINT) {
+    //     this.nom = NOM;
+    //     this.speed = SPEED;
+    //     this.attackDmg = ATTACKDMG;
+    //     this.healthPoint = HEALTHPOINT;
+    //    // console.log(this.nom);
+    // }
+    constructor(dataFromService) {
+        this.nom = dataFromService.name;
+        this.speed = dataFromService.stats[0].base_stat;
+        this.attackDmg = dataFromService.stats[4].base_stat;
+        this.totalHealthPoint = dataFromService.stats[5].base_stat * 10;
+        this.healthPoint = dataFromService.stats[5].base_stat * 10;
        // console.log(this.nom);
     }
     attack(pokemon: Pokemon) {
