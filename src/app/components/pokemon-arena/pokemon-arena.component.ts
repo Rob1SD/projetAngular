@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
-import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,7 +17,7 @@ export class PokemonArenaComponent implements OnInit {
     constructor(public poke: PokemonService) {
 
 
-        var unsub = poke.GetPokemonByName("charizard").subscribe( (data: IPokemon) => {
+        var unsub = poke.GetPokemonByName("ponyta").subscribe( (data: IPokemon) => {
             this.pokemon1 = data;
             console.log(this.pokemon1);
             unsub.unsubscribe();
