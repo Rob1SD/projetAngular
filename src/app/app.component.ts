@@ -13,6 +13,11 @@ export class AppComponent {
       console.log(data);
       unsub.unsubscribe();
     });
+
+    const unsub2 = poke.GetPokemonById(1).subscribe((data: IPokemon) => {
+      console.log(data);
+      unsub2.unsubscribe();
+    });
   }
 
   title = 'pokemonArena';
