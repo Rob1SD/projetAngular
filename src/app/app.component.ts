@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'pokemonArena';
+  title = 'le meilleur pokemon arena, crée par Félix Alexandre, Pougetoux Jean et Soldé Robin';
 }
