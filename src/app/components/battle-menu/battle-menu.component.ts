@@ -12,4 +12,8 @@ export class BattleMenuComponent implements OnInit {
   ngOnInit() {
   }
 
+  changeState() {
+    
+  }
+
 }
