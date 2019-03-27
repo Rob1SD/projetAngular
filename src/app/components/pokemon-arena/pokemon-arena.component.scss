@@ -10,16 +10,26 @@
     width: 100%;
 }
 
+#ennemy_pokemon_dead {
+    position: fixed;
+    text-align: right;
+    width: 100%;
+}
+
 #ennemy_pokemon img {
     width: 10%;
     margin-right: 32%;
-    padding-top: 10%;
+    padding-top: 12%;
 }
 
 #ennemy_pokemon_move img {
     width: 10%;
     margin-right: 33%;
-    padding-top: 10%;
+    padding-top: 12%;
+}
+
+#ennemy_pokemon_dead img {
+    display: none;
 }
 
 #my_pokemon {
@@ -34,6 +44,11 @@
     width: 100%
 }
 
+#my_pokemon_dead {
+    position: fixed;
+    text-align: left;
+    width: 100%
+}
 
 #my_pokemon img {
     width: 20%;
@@ -45,6 +60,10 @@
     width: 20%;
     margin-left: 29%;
     padding-top: 14%;
+}
+
+#my_pokemon_dead img {
+    display: none;
 }
 
 #background {
