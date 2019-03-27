@@ -7,18 +7,23 @@ import {HttpClientModule} from '@angular/common/http';
 import { PokemonArenaComponent } from './components/pokemon-arena/pokemon-arena.component';
 import { BattleMenuComponent } from './components/battle-menu/battle-menu.component';
 import {MatButtonModule} from '@angular/material/button';
+import { HealthBarComponent } from './components/health-bar/health-bar.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
     PokemonArenaComponent,
-    BattleMenuComponent
+    BattleMenuComponent,
+    HealthBarComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

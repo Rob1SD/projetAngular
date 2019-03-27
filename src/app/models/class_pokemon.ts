@@ -49,9 +49,11 @@ export class Pokemon {
 export function getFirstAttacker(p1: Pokemon, p2: Pokemon) {
     return p1.speed > p2.speed ? p1 : p2;
 }
+
 function playerTurn(p1: Pokemon, p2: Pokemon) {
 
 }
+
 export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
     const player1: Pokemon = getFirstAttacker(p1, p2);
     const player2: Pokemon = player1 === p1 ? p2 : p1;
