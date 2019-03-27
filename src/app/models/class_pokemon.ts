@@ -21,9 +21,8 @@ export class Pokemon {
         this.totalHealthPoint = dataFromService.stats[5].base_stat;
         this.healthPoint = dataFromService.stats[5].base_stat;
         this.defense = dataFromService.stats[3].base_stat;
-        this.frontImage = dataFromService.sprites.front_default;
-        this.backImage = dataFromService.sprites.back_default;
-        // console.log(this.nom);
+        this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
+        this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
     }
 
     attack(pokemon: Pokemon) {

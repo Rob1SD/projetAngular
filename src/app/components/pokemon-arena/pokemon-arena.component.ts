@@ -21,8 +21,8 @@ export class PokemonArenaComponent implements OnInit {
     constructor(public poke: PokemonService) {
 
         const unsub = forkJoin(
-            poke.GetPokemonByName("caterpie"),
-            poke.GetPokemonByName("pikachu")
+            poke.GetPokemonByName("pikachu"),
+            poke.GetPokemonByName("caterpie")
         ).subscribe(obsArray => {
             this.pokemon1 = new Pokemon(obsArray[0]);
             this.pokemon2 = new Pokemon(obsArray[1]);
