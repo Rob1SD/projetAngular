@@ -18,9 +18,12 @@ export class PokemonArenaComponent implements OnInit {
     pokemon2: Pokemon;
     enp: string;
     myp: string;
+    displayText: string;
 
     constructor(public poke: PokemonService) {
 
+        this.displayText = "";
+        
         const fillAttackList = function (data) {
             const max = data.moves.length;
             const min = 0;
@@ -103,6 +106,10 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.pokemon2) {
             this.myp = "mypimgmove";
         }
+    }
+    
+    public write(text : string) {
+        this.displayText += text + "<br>";
     }
 
     delay(ms: number) {
