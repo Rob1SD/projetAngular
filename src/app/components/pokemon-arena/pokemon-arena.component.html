@@ -6,6 +6,23 @@
 
 <img class={{myp}} src={{pokemon1.backImage}}>
 
+<span *ngIf="pokemon1 != null && pokemon2 != null">
+    <app-health-bar 
+    [current]="pokemon2.healthPoint" 
+    [max]="pokemon2.totalHealthPoint" 
+    [name]="pokemon2.nom"
+    *ngIf="pokemon2.healthPoint > 0" 
+    style="left: 30%; top: 14%;  position: fixed;">
+    </app-health-bar>
+
+    <app-health-bar 
+    [current]="pokemon1.healthPoint" 
+    [max]="pokemon1.totalHealthPoint" 
+    [name]="pokemon1.nom"
+    *ngIf="pokemon1.healthPoint > 0" 
+    style="right: 28%; top: 42%; position: fixed;">
+    </app-health-bar>
+</span>
 
 <button id="play" mat-button color="blue" (click)="animate()">Play</button>
  
