@@ -1,6 +1,4 @@
 import { PokemonArenaComponent } from "../components/pokemon-arena/pokemon-arena.component";
-import {forkJoin} from 'rxjs';
-import {PokemonService} from '../pokemon.service';
 export class PokemonAttack {
   public name : string;
   public power : number;
@@ -30,7 +28,7 @@ export class Pokemon {
     public attackList: PokemonAttack[];
 
 
-    constructor(dataFromService, poke :PokemonService) {
+    constructor(dataFromService) {
         this.level = 1;
         this.nom = dataFromService.name;
         this.speed = dataFromService.stats[0].base_stat;
@@ -43,29 +41,14 @@ export class Pokemon {
 
         // this.attackList = dataFromService.names[6].nameS
     }
-    getAttackList(dataAttacks) {
-      this.attackList  = [];
-      const sizeAttacks = dataAttacks.length;
-      const max = sizeAttacks;
-      const min = 0;
-      const posArray : number[] = [];
+    setAttackList(dataAttacks) {
+      this.attackList = dataAttacks.map(data => {
+        return new PokemonAttack(data);
+    });
 
-      for (let i = 0; i < 4; ++i){
-        const randomPos = Math.random() * (max - min) + min;
-        posArray.push(randomPos);
-      }
-      const unsub = forkJoin(
-        poke.GetPokemonByName("pikachu"),
-        poke.GetPokemonByName("caterpie")
-      ).subscribe(obsArray => {
-        console.log(obsArray[0]);
-        this.pokemon1 = new Pokemon(obsArray[0]);
-        this.pokemon2 = new Pokemon(obsArray[1]);
 
-        unsub.unsubscribe();
-
-      })
     }
+
     attack(pokemon: Pokemon) {
         this.Damage(pokemon);
 
@@ -122,7 +105,7 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
 
 }
 export function getWinner(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
-    var winner = p1.healthPoint > 0 ? p1 : p2;
+    const winner = p1.healthPoint > 0 ? p1 : p2;
     arenaComponent.death(winner);
     return winner;
     

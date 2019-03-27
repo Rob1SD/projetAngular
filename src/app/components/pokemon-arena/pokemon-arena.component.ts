@@ -21,33 +21,49 @@ export class PokemonArenaComponent implements OnInit {
 
     constructor(public poke: PokemonService) {
 
-        poke.GetPokemonByName("pikachu").pipe(
+      const fillAttackList = function(data){
+        const max = data.moves.length;
+        const min = 0;
+        const posArray : number[] = [];
+        for (let i = 0; i < 4; ++i){
+          const randomPos = Math.random() * (max - min) + min;
+          posArray.push(randomPos);
+        }
+
+        return data.moves.filter((val, idx) => posArray.includes(idx));
+      }
+      poke.GetPokemonByName("pikachu").pipe(
+          map(data => {
+              this.pokemon1 = new Pokemon(data);
+              return fillAttackList(data);
+
+          }),
+          flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+      ).subscribe(attackArray => {
+        this.pokemon1.setAttackList(attackArray);
+      });
+      poke.GetPokemonByName("caterpie").pipe(
             map(data => {
-                let pokemon = new Pokemon(data);
-                const max = data.moves.length;
-                const min = 0;
-                const posArray : number[] = [];
-                for (let i = 0; i < 4; ++i){
-                    const randomPos = Math.random() * (max - min) + min;
-                    posArray.push(randomPos);
-                }
-                
-                return { pokemon, arrayMoves: data.moves.filter((val, idx) => posArray.includes(idx))};
+                this.pokemon2 = new Pokemon(data);
+                return fillAttackList(data);
+
             }),
-            flatMap(dataArr => forkJoin(dataArr.arrayMoves.map(val => poke.GetPokemonAttackUrl(val.move.url))))
-        )
+            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        ).subscribe(attackArray => {
+          this.pokemon2.setAttackList(attackArray);
+        });
 
-        const unsub = forkJoin(
-            poke.GetPokemonByName("pikachu"),
-            poke.GetPokemonByName("caterpie")
-        ).subscribe(obsArray => {
-            console.log(obsArray[0]);
-            this.pokemon1 = new Pokemon(obsArray[0]);
-            this.pokemon2 = new Pokemon(obsArray[1]);
-
-            unsub.unsubscribe();
-
-        })
+        // const unsub = forkJoin(
+        //     poke.GetPokemonByName("pikachu"),
+        //     poke.GetPokemonByName("caterpie")
+        // ).subscribe(obsArray => {
+        //     console.log(obsArray[0]);
+        //     this.pokemon1 = new Pokemon(obsArray[0]);
+        //     this.pokemon2 = new Pokemon(obsArray[1]);
+        //
+        //     unsub.unsubscribe();
+        //
+        // })
 
         this.enp = "enpimg";
         this.myp = "mypimg";
@@ -55,7 +71,7 @@ export class PokemonArenaComponent implements OnInit {
 
     animate(){
         fight(this.pokemon1, this.pokemon2, this).then(() =>{
-            let winner = getWinner(this.pokemon1, this.pokemon2, this);
+            const winner = getWinner(this.pokemon1, this.pokemon2, this);
             console.log('Le gagnant est ' + winner.nom);
         });
     }
