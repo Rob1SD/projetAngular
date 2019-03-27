@@ -1,14 +1,17 @@
 <img id="background" src="https://backgroundcheckall.com/wp-content/uploads/2017/12/pokemon-battle-background-6.png">
        
 
-<div id="ennemy_pokemon">
+<div id="{{enp}}">
     
     <img src={{pokemon2.sprites.front_default}}>
     
 </div>
 
-<div id="my_pokemon">
+<div id="{{myp}}">
     
-    <img src={{pokemon1.sprites.back_default}}>
+    <img id="coucou" src={{pokemon1.sprites.back_default}}>
     
 </div>
+
+
+<button mat-button color="blue" (click)="animate()">animate</button>
