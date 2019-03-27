@@ -40,18 +40,19 @@ export class PokemonArenaComponent implements OnInit {
             return data.moves.filter((val, idx) => posArray.includes(idx));
         }
 
-        const p1 = poke.GetPokemonByName("pikachu").pipe(
+        const p1 = poke.GetPokemonByName("blastoise").pipe(
 
             map(data => {
-                this.pokemon1 = new Pokemon(data);
+                this.pokemon1 = new Pokemon(data, "blue");
                 return fillAttackList(data);
             }),
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
         );
 
-        const p2 = poke.GetPokemonByName("caterpie").pipe(
+        const p2 = poke.GetPokemonByName("charizard").pipe(
+
             map(data => {
-                this.pokemon2 = new Pokemon(data);
+                this.pokemon2 = new Pokemon(data, "red");
                 return fillAttackList(data);
             }),
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
@@ -71,7 +72,7 @@ export class PokemonArenaComponent implements OnInit {
     animate() {
         fight(this.pokemon1, this.pokemon2, this).then(() => {
             const winner = getWinner(this.pokemon1, this.pokemon2, this);
-            this.write('Le gagnant est ' + winner.nom);
+            this.write('Le gagnant est ' + winner.nom, winner.color);
         });
     }
 
@@ -114,7 +115,7 @@ export class PokemonArenaComponent implements OnInit {
         }
     }
     
-    public write(text : string) {
+    public write(text : string, color: string = "black") {
         this.displayText += text + "<br>";
     }
 

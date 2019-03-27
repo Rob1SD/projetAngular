@@ -30,18 +30,21 @@ export class Pokemon {
     public lastDammageTaken : number;
     public attackList: PokemonAttack[];
     public lastAttaqueUsed : PokemonAttack;
+    public color : string;
 
 
-    constructor(dataFromService) {
+    constructor(dataFromService, color : string) {
+      console.log(dataFromService)
         this.level = 1;
+        this.color = color;
         this.nom = dataFromService.name;
         this.speed = dataFromService.stats[0].base_stat;
         this.attackDmg = dataFromService.stats[4].base_stat;
-        this.attackSpe = dataFromService.stats[4].base_stat;
+        this.attackSpe = dataFromService.stats[2].base_stat;
         this.totalHealthPoint = dataFromService.stats[5].base_stat;
         this.healthPoint = dataFromService.stats[5].base_stat;
         this.defense = dataFromService.stats[3].base_stat;
-        this.defenseSpe = dataFromService.stats[3].base_stat;
+        this.defenseSpe = dataFromService.stats[1].base_stat;
         this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
         this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
 
@@ -103,12 +106,12 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
         arenaComponent.write('===Tour : ' + turn + '===');
         await pause(player1, player2);
         await arenaComponent.shake(player2);
-        arenaComponent.write(player1.nom + ' lance '+ player1.lastAttaqueUsed.name + " sur " + player2.nom);
+        arenaComponent.write(player1.nom + ' lance '+ player1.lastAttaqueUsed.name + " sur " + player2.nom, player1.color);
         arenaComponent.write(player2.nom + ' perd ' + player2.lastDammageTaken + ' hp');
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
             await arenaComponent.shake(player1);
-          arenaComponent.write(player2.nom + ' lance '+ player2.lastAttaqueUsed.name + " sur " + player1.nom);
+          arenaComponent.write(player2.nom + ' lance '+ player2.lastAttaqueUsed.name + " sur " + player1.nom, player2.color);
           arenaComponent.write(player1.nom + ' perd ' + player1.lastDammageTaken + ' hp');
 
         }

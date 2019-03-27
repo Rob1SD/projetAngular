@@ -1,7 +1,8 @@
 .enpimg {
     position: fixed;
-    left: 47vw;
-    bottom: 20vw;
+    width: 6vw;
+    left: 45vw;
+    top: 21vw;
 }
 
 .enpimgmove {
@@ -10,9 +11,9 @@
 
 .mypimg {
     position: fixed;
-    width: 13%;
-    left: 16vw;
-    bottom: 8vw;
+    width: 12vw;
+    left: 15vw;
+    top: 28vw;
 }
 
 .mypimgmove {
@@ -53,15 +54,17 @@
 }
 
 #hpbar1 {
-    left: 13%; 
-    top: 18%;  
     position: fixed;
-    color:white;
+    width: 5vw;
+    left: 13vw; 
+    top: 10vw;  
+    color: white;
 }
 
 #hpbar2 {
-    left: 44%; 
-    bottom: 20%;
-    color:white;
     position: fixed;
+    width: 5vw;
+    right: 52vw; 
+    top: 35vw;
+    color: white;
 }
