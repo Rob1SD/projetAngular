@@ -84,19 +84,19 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
     const player2: Pokemon = player1 === p1 ? p2 : p1;
     let turn = 1;
     while (player1.healthPoint > 0 && player2.healthPoint > 0) {
-        console.log('===================================================');
-        console.log('Tour : ' + turn);
-        console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
-        console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
+        arenaComponent.write('===');
+        arenaComponent.write('Tour : ' + turn);
+        arenaComponent.write(player1.nom + ' : ' + player1.healthPoint + ' hp');
+        arenaComponent.write(player2.nom + ' : ' + player2.healthPoint + ' hp');
         await pause(player1, player2);
         await arenaComponent.shake(player2);
-        console.log(player1.nom + ' attaque ' + player2.nom);
-        console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
+        arenaComponent.write(player1.nom + ' attaque ' + player2.nom);
+        arenaComponent.write(player2.nom + ' : ' + player2.healthPoint + ' hp');
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
             await arenaComponent.shake(player1);
-            console.log(player2.nom + ' attaque ' + player1.nom);
-            console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
+            arenaComponent.write(player2.nom + ' attaque ' + player1.nom);
+            arenaComponent.write(player1.nom + ' : ' + player1.healthPoint + ' hp');
 
         }
         ++turn;

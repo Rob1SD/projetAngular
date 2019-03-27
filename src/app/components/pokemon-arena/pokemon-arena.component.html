@@ -1,10 +1,10 @@
 <img id="background" src="https://backgroundcheckall.com/wp-content/uploads/2017/12/pokemon-battle-background-6.png">
        
 
-<img class={{enp}} src={{pokemon2.frontImage}}>
+<img class={{enp}} src={{pokemon2?.frontImage}}>
 
 
-<img class={{myp}} src={{pokemon1.backImage}}>
+<img class={{myp}} src={{pokemon1?.backImage}}>
 
 <span *ngIf="pokemon1 != null && pokemon2 != null">
     <app-health-bar 
@@ -26,5 +26,5 @@
 
 <button id="play" mat-button color="blue" (click)="animate()">Play</button>
  
-<div id="display"></div>
+<div id="display" [innerHTML]="displayText"></div>
 
