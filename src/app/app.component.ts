@@ -10,8 +10,8 @@ import {forkJoin} from 'rxjs';
 })
 export class AppComponent {
 
-   /* title = 'le meilleur pokemon arena, crée par Félix Alexandre, Pougetoux Jean et Soldé Robin';
-    constructor(public pokeservice: PokemonService){
+    title = 'le meilleur pokemon arena, crée par Félix Alexandre, Pougetoux Jean et Soldé Robin';
+    /*constructor(public pokeservice: PokemonService){
         let poke1: Pokemon;
         let poke2: Pokemon;
         const unsub = forkJoin(
