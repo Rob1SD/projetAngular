@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
 import { fight, getWinner, Pokemon } from "../../models/class_pokemon";
-import { forkJoin } from "rxjs";
+import { forkJoin, of } from "rxjs";
+import { flatMap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -22,26 +23,49 @@ export class PokemonArenaComponent implements OnInit {
 
     constructor(public poke: PokemonService) {
 
-        const unsub = forkJoin(
-            poke.GetPokemonByName("dialga"),
-            poke.GetPokemonByName("caterpie")
-        ).subscribe(obsArray => {
-            this.pokemon1 = new Pokemon(obsArray[0]);
-            this.pokemon2 = new Pokemon(obsArray[1]);
+        this.displayText = "";
+        const fillAttackList = function(data){
+            const max = data.moves.length;
+            const min = 0;
+            const posArray : number[] = [];
+            for (let i = 0; i < 4; ++i){
+                const randomPos = Math.random() * (max - min) + min;
+                posArray.push(randomPos);
+            }
 
-            unsub.unsubscribe();
-
-            this.enp = "enpimg";
-            this.myp = "mypimg";
-
-            this.displayText = ("Bienvenue dans le combat " + this.pokemon1.nom + " contre " + this.pokemon2.nom + "<br>");
-
-        })
+            return data.moves.filter((val, idx) => posArray.includes(idx));
         }
+        poke.GetPokemonByName("pikachu").pipe(
+            map(data => {
+                this.pokemon1 = new Pokemon(data);
+                return fillAttackList(data);
+
+            }),
+            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        ).subscribe(attackArray => {
+            this.pokemon1.setAttackList(attackArray);
+        });
+        poke.GetPokemonByName("dialga").pipe(
+            map(data => {
+                this.pokemon2 = new Pokemon(data);
+                return fillAttackList(data);
+
+            }),
+            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        ).subscribe(attackArray => {
+            this.pokemon2.setAttackList(attackArray);
+        });
+
+        this.enp = "enpimg";
+        this.myp = "mypimg";
+
+        //this.displayText = ("Bienvenue dans le combat " + this.pokemon1.nom + " contre " + this.pokemon2.nom + "<br>");
+
+    }
 
     animate(){
         fight(this.pokemon1, this.pokemon2, this).then(() =>{
-            let winner = getWinner(this.pokemon1, this.pokemon2, this);
+            const winner = getWinner(this.pokemon1, this.pokemon2, this);
             console.log('Le gagnant est ' + winner.nom);
         });
     }

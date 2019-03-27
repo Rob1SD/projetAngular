@@ -19,4 +19,7 @@ export class PokemonService {
   public GetPokemonById(id: number): Observable<IPokemon> {
     return this.http.get<IPokemon>('https://pokeapi.co/api/v2/pokemon/' + id);
   }
+   public GetPokemonAttackUrl(url : string)  {
+     return this.http.get(url);
+   }
 }

@@ -1,5 +1,19 @@
 import { PokemonArenaComponent } from "../components/pokemon-arena/pokemon-arena.component";
+export class PokemonAttack {
+  public name : string;
+  public power : number;
+  public ppActuel : number;
+  public pp : number;
+  public damageClass : string;
+  constructor(dataFromService) {
+    this.name = dataFromService.names[6].name;
+    this.power = dataFromService.power;
+    this.pp = dataFromService.pp;
+    this.ppActuel = dataFromService.pp;
+    this.damageClass = dataFromService.damage_class.name;
 
+  }
+}
 export class Pokemon {
 
     public nom: string;
@@ -11,6 +25,7 @@ export class Pokemon {
     public defense: number;
     public frontImage: string;
     public backImage: string;
+    public attackList: PokemonAttack[];
 
 
     constructor(dataFromService) {
@@ -23,6 +38,15 @@ export class Pokemon {
         this.defense = dataFromService.stats[3].base_stat;
         this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
         this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
+
+        // this.attackList = dataFromService.names[6].nameS
+    }
+    setAttackList(dataAttacks) {
+      this.attackList = dataAttacks.map(data => {
+        return new PokemonAttack(data);
+    });
+
+
     }
 
     attack(pokemon: Pokemon) {
@@ -58,19 +82,19 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
     const player2: Pokemon = player1 === p1 ? p2 : p1;
     let turn = 1;
     while (player1.healthPoint > 0 && player2.healthPoint > 0) {
-        console.log('===================================================');
-        console.log('Tour : ' + turn);
-        console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
-        console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
+        arenaComponent.write('===');
+        arenaComponent.write('Tour : ' + turn);
+        arenaComponent.write(player1.nom + ' : ' + player1.healthPoint + ' hp');
+        arenaComponent.write(player2.nom + ' : ' + player2.healthPoint + ' hp');
         await pause(player1, player2);
         await arenaComponent.shake(player2);
-        console.log(player1.nom + ' attaque ' + player2.nom);
-        console.log(player2.nom + ' : ' + player2.healthPoint + ' hp');
+        arenaComponent.write(player1.nom + ' attaque ' + player2.nom);
+        arenaComponent.write(player2.nom + ' : ' + player2.healthPoint + ' hp');
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
             await arenaComponent.shake(player1);
-            console.log(player2.nom + ' attaque ' + player1.nom);
-            console.log(player1.nom + ' : ' + player1.healthPoint + ' hp');
+            arenaComponent.write(player2.nom + ' attaque ' + player1.nom);
+            arenaComponent.write(player1.nom + ' : ' + player1.healthPoint + ' hp');
 
         }
         ++turn;
@@ -81,7 +105,7 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
 
 }
 export function getWinner(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
-    var winner = p1.healthPoint > 0 ? p1 : p2;
+    const winner = p1.healthPoint > 0 ? p1 : p2;
     arenaComponent.death(winner);
     return winner;
     
