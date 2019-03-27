@@ -18,23 +18,29 @@ export class PokemonArenaComponent implements OnInit {
     pokemon2: Pokemon;
     enp: string;
     myp: string;
+    displayText: string;
 
     constructor(public poke: PokemonService) {
 
 
+        this.displayText = "";
+        
         const fillAttackList = function (data) {
             const max = data.moves.length;
             const min = 0;
             const posArray: number[] = [];
             for (let i = 0; i < 4; ++i) {
-                const randomPos = Math.floor(Math.random() * (max - min) + min);
+                let randomPos = Math.floor(Math.random() * (max - min) + min);
+                while (posArray.indexOf(randomPos) >= 0) {
+                  randomPos = Math.floor(Math.random() * (max - min) + min);
+                }
                 posArray.push(randomPos);
             }
 
             return data.moves.filter((val, idx) => posArray.includes(idx));
         }
 
-        let p1 = poke.GetPokemonByName("pikachu").pipe(
+        const p1 = poke.GetPokemonByName("pikachu").pipe(
 
             map(data => {
                 this.pokemon1 = new Pokemon(data);
@@ -43,7 +49,7 @@ export class PokemonArenaComponent implements OnInit {
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
         );
 
-        let p2 = poke.GetPokemonByName("caterpie").pipe(
+        const p2 = poke.GetPokemonByName("caterpie").pipe(
             map(data => {
                 this.pokemon2 = new Pokemon(data);
                 return fillAttackList(data);
@@ -65,7 +71,7 @@ export class PokemonArenaComponent implements OnInit {
     animate() {
         fight(this.pokemon1, this.pokemon2, this).then(() => {
             const winner = getWinner(this.pokemon1, this.pokemon2, this);
-            console.log('Le gagnant est ' + winner.nom);
+            this.write('Le gagnant est ' + winner.nom);
         });
     }
 
@@ -106,6 +112,10 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.pokemon2) {
             this.myp = "mypimgmove";
         }
+    }
+    
+    public write(text : string) {
+        this.displayText += text + "<br>";
     }
 
     delay(ms: number) {
