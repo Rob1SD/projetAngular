@@ -86,6 +86,7 @@ export class PokemonArenaComponent implements OnInit {
     }
 
     public write(text : string) {
+        this.displayText += text + "<br>";
     }
 
     delay(ms: number) {
