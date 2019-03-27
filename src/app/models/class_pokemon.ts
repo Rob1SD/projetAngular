@@ -1,5 +1,21 @@
 import { PokemonArenaComponent } from "../components/pokemon-arena/pokemon-arena.component";
+import {forkJoin} from 'rxjs';
+import {PokemonService} from '../pokemon.service';
+export class PokemonAttack {
+  public name : string;
+  public power : number;
+  public ppActuel : number;
+  public pp : number;
+  public damageClass : string;
+  constructor(dataFromService) {
+    this.name = dataFromService.names[6].name;
+    this.power = dataFromService.power;
+    this.pp = dataFromService.pp;
+    this.ppActuel = dataFromService.pp;
+    this.damageClass = dataFromService.damage_class.name;
 
+  }
+}
 export class Pokemon {
 
     public nom: string;
@@ -11,9 +27,10 @@ export class Pokemon {
     public defense: number;
     public frontImage: string;
     public backImage: string;
+    public attackList: PokemonAttack[];
 
 
-    constructor(dataFromService) {
+    constructor(dataFromService, poke :PokemonService) {
         this.level = 1;
         this.nom = dataFromService.name;
         this.speed = dataFromService.stats[0].base_stat;
@@ -23,8 +40,32 @@ export class Pokemon {
         this.defense = dataFromService.stats[3].base_stat;
         this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
         this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
-    }
 
+        // this.attackList = dataFromService.names[6].nameS
+    }
+    getAttackList(dataAttacks) {
+      this.attackList  = [];
+      const sizeAttacks = dataAttacks.length;
+      const max = sizeAttacks;
+      const min = 0;
+      const posArray : number[] = [];
+
+      for (let i = 0; i < 4; ++i){
+        const randomPos = Math.random() * (max - min) + min;
+        posArray.push(randomPos);
+      }
+      const unsub = forkJoin(
+        poke.GetPokemonByName("pikachu"),
+        poke.GetPokemonByName("caterpie")
+      ).subscribe(obsArray => {
+        console.log(obsArray[0]);
+        this.pokemon1 = new Pokemon(obsArray[0]);
+        this.pokemon2 = new Pokemon(obsArray[1]);
+
+        unsub.unsubscribe();
+
+      })
+    }
     attack(pokemon: Pokemon) {
         this.Damage(pokemon);
 

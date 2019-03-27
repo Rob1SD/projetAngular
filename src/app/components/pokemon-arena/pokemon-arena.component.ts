@@ -24,6 +24,7 @@ export class PokemonArenaComponent implements OnInit {
             poke.GetPokemonByName("pikachu"),
             poke.GetPokemonByName("caterpie")
         ).subscribe(obsArray => {
+            console.log(obsArray[0]);
             this.pokemon1 = new Pokemon(obsArray[0]);
             this.pokemon2 = new Pokemon(obsArray[1]);
 
