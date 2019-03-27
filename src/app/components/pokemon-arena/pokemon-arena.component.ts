@@ -13,100 +13,90 @@ import { flatMap, map } from 'rxjs/operators';
 })
 export class PokemonArenaComponent implements OnInit {
 
-    txt : string;
-    pokemon1 : Pokemon;
-    pokemon2 : Pokemon;
-    enp : string;
-    myp : string;
+    txt: string;
+    pokemon1: Pokemon;
+    pokemon2: Pokemon;
+    enp: string;
+    myp: string;
 
     constructor(public poke: PokemonService) {
 
-      const fillAttackList = function(data){
-        const max = data.moves.length;
-        const min = 0;
-        const posArray : number[] = [];
-        for (let i = 0; i < 4; ++i){
-          const randomPos = Math.random() * (max - min) + min;
-          posArray.push(randomPos);
+        const fillAttackList = function (data) {
+            const max = data.moves.length;
+            const min = 0;
+            const posArray: number[] = [];
+            for (let i = 0; i < 4; ++i) {
+                const randomPos = Math.floor(Math.random() * (max - min) + min);
+                posArray.push(randomPos);
+            }
+
+            return data.moves.filter((val, idx) => posArray.includes(idx));
         }
+        
+        let p1 = poke.GetPokemonByName("pikachu").pipe(
+            map(data => {
+                this.pokemon1 = new Pokemon(data);
+                return fillAttackList(data);
+            }),
+            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        );
 
-        return data.moves.filter((val, idx) => posArray.includes(idx));
-      }
-      poke.GetPokemonByName("pikachu").pipe(
-          map(data => {
-              this.pokemon1 = new Pokemon(data);
-              return fillAttackList(data);
-
-          }),
-          flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
-      ).subscribe(attackArray => {
-        this.pokemon1.setAttackList(attackArray);
-      });
-      poke.GetPokemonByName("caterpie").pipe(
+        let p2 = poke.GetPokemonByName("caterpie").pipe(
             map(data => {
                 this.pokemon2 = new Pokemon(data);
                 return fillAttackList(data);
-
             }),
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
-        ).subscribe(attackArray => {
-          this.pokemon2.setAttackList(attackArray);
-        });
+        );
 
-        // const unsub = forkJoin(
-        //     poke.GetPokemonByName("pikachu"),
-        //     poke.GetPokemonByName("caterpie")
-        // ).subscribe(obsArray => {
-        //     console.log(obsArray[0]);
-        //     this.pokemon1 = new Pokemon(obsArray[0]);
-        //     this.pokemon2 = new Pokemon(obsArray[1]);
-        //
-        //     unsub.unsubscribe();
-        //
-        // })
+        forkJoin(p1,p2).subscribe(ar => {
+            this.pokemon1.setAttackList(ar[0]);
+            this.pokemon2.setAttackList(ar[1]);
+            //afficher message chargé
+        });
 
         this.enp = "enpimg";
         this.myp = "mypimg";
     }
 
-    animate(){
-        fight(this.pokemon1, this.pokemon2, this).then(() =>{
+    animate() {
+        fight(this.pokemon1, this.pokemon2, this).then(() => {
             const winner = getWinner(this.pokemon1, this.pokemon2, this);
             console.log('Le gagnant est ' + winner.nom);
         });
     }
 
-    public async shake(pokemon : Pokemon) {
-        const delayTime=80;
-        if (pokemon===this.pokemon2){
-            await (async () => { 
-                for(var i = 0; i <= 3; i++){
+    public async shake(pokemon: Pokemon) {
+        const delayTime = 80;
+        if (pokemon === this.pokemon2) {
+            await (async () => {
+                for (var i = 0; i <= 3; i++) {
                     this.enp = "enpimgmove";
 
                     await this.delay(delayTime);
 
                     this.enp = "enpimg";
 
-                    await this.delay(delayTime); 
+                    await this.delay(delayTime);
                 }
-            })();   
+            })();
         }
         else if (pokemon === this.pokemon1) {
-            await (async () => { 
-                for(var i = 0; i <= 3; i++){
+            await (async () => {
+                for (var i = 0; i <= 3; i++) {
                     this.myp = "mypimgmove";
 
                     await this.delay(delayTime);
 
                     this.myp = "mypimg";
 
-                    await this.delay(delayTime); 
+                    await this.delay(delayTime);
                 }
             })();
         }
     }
 
-    public death(pokemon : Pokemon) {
+    public death(pokemon: Pokemon) {
         if (pokemon === this.pokemon1) {
             this.enp = "enpimgmove";
         }
@@ -116,7 +106,7 @@ export class PokemonArenaComponent implements OnInit {
     }
 
     delay(ms: number) {
-        return new Promise( resolve => setTimeout(resolve, ms) );
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     ngOnInit() {
