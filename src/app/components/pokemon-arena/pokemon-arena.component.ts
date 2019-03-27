@@ -44,7 +44,7 @@ export class PokemonArenaComponent implements OnInit {
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
         );
 
-        let p2 = poke.GetPokemonByName("caterpie").pipe(
+        let p2 = poke.GetPokemonByName("snorlax").pipe(
             map(data => {
                 this.pokemon2 = new Pokemon(data);
                 return fillAttackList(data);
