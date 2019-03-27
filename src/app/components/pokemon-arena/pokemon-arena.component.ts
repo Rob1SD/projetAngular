@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
 import { fight, getWinner, Pokemon } from "../../models/class_pokemon";
-import { forkJoin } from "rxjs";
+import { forkJoin, of } from "rxjs";
+import { flatMap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -19,6 +20,22 @@ export class PokemonArenaComponent implements OnInit {
     myp : string;
 
     constructor(public poke: PokemonService) {
+
+        poke.GetPokemonByName("pikachu").pipe(
+            map(data => {
+                let pokemon = new Pokemon(data);
+                const max = data.moves.length;
+                const min = 0;
+                const posArray : number[] = [];
+                for (let i = 0; i < 4; ++i){
+                    const randomPos = Math.random() * (max - min) + min;
+                    posArray.push(randomPos);
+                }
+                
+                return { pokemon, arrayMoves: data.moves.filter((val, idx) => posArray.includes(idx))};
+            }),
+            flatMap(dataArr => forkJoin(dataArr.arrayMoves.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        )
 
         const unsub = forkJoin(
             poke.GetPokemonByName("pikachu"),
