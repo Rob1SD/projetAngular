@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
 import { fight, getWinner, Pokemon } from "../../models/class_pokemon";
-import { forkJoin } from "rxjs";
+import { forkJoin, of } from "rxjs";
+import { flatMap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -20,6 +21,22 @@ export class PokemonArenaComponent implements OnInit {
 
     constructor(public poke: PokemonService) {
 
+        poke.GetPokemonByName("pikachu").pipe(
+            map(data => {
+                let pokemon = new Pokemon(data);
+                const max = data.moves.length;
+                const min = 0;
+                const posArray : number[] = [];
+                for (let i = 0; i < 4; ++i){
+                    const randomPos = Math.random() * (max - min) + min;
+                    posArray.push(randomPos);
+                }
+                
+                return { pokemon, arrayMoves: data.moves.filter((val, idx) => posArray.includes(idx))};
+            }),
+            flatMap(dataArr => forkJoin(dataArr.arrayMoves.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+        )
+
         const unsub = forkJoin(
             poke.GetPokemonByName("pikachu"),
             poke.GetPokemonByName("caterpie")
@@ -32,8 +49,8 @@ export class PokemonArenaComponent implements OnInit {
 
         })
 
-        this.enp = "ennemy_pokemon";
-        this.myp = "my_pokemon";
+        this.enp = "enpimg";
+        this.myp = "mypimg";
     }
 
     animate(){
@@ -48,12 +65,11 @@ export class PokemonArenaComponent implements OnInit {
         if (pokemon===this.pokemon2){
             await (async () => { 
                 for(var i = 0; i <= 3; i++){
-                    this.enp = "ennemy_pokemon_move";
+                    this.enp = "enpimgmove";
 
                     await this.delay(delayTime);
 
-                    // Do something after
-                    this.enp = "ennemy_pokemon";
+                    this.enp = "enpimg";
 
                     await this.delay(delayTime); 
                 }
@@ -62,12 +78,11 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.pokemon1) {
             await (async () => { 
                 for(var i = 0; i <= 3; i++){
-                    this.myp = "my_pokemon_move";
+                    this.myp = "mypimgmove";
 
                     await this.delay(delayTime);
 
-                    // Do something after
-                    this.myp = "my_pokemon";
+                    this.myp = "mypimg";
 
                     await this.delay(delayTime); 
                 }
@@ -77,10 +92,10 @@ export class PokemonArenaComponent implements OnInit {
 
     public death(pokemon : Pokemon) {
         if (pokemon === this.pokemon1) {
-            this.enp = "ennemy_pokemon_dead";
+            this.enp = "enpimgmove";
         }
         else if (pokemon === this.pokemon2) {
-            this.myp = "my_pokemon_dead";
+            this.myp = "mypimgmove";
         }
     }
 
