@@ -1,24 +1,18 @@
 <img id="background" src="https://backgroundcheckall.com/wp-content/uploads/2017/12/pokemon-battle-background-6.png">
        
 
-<div id="{{enp}}">
-    
-    <img src={{pokemon2?.frontImage}}>
-    
-</div>
+<img class={{enp}} src={{pokemon2.frontImage}}>
 
-<div id="{{myp}}">
-    
-    <img id="coucou" src={{pokemon1?.backImage}}>
-    
-</div>
+
+<img class={{myp}} src={{pokemon1.backImage}}>
+
 <span *ngIf="pokemon1 != null && pokemon2 != null">
     <app-health-bar 
     [current]="pokemon2.healthPoint" 
     [max]="pokemon2.totalHealthPoint" 
     [name]="pokemon2.nom"
     *ngIf="pokemon2.healthPoint > 0" 
-    style="left: 30%; top: 12%;  position: fixed;">
+    id="hpbar1">
     </app-health-bar>
 
     <app-health-bar 
@@ -26,8 +20,11 @@
     [max]="pokemon1.totalHealthPoint" 
     [name]="pokemon1.nom"
     *ngIf="pokemon1.healthPoint > 0" 
-    style="right: 28%; top: 42%; position: fixed;">
+    id="hpbar2">
     </app-health-bar>
 </span>
 
-<button mat-button color="blue" (click)="animate()">Play</button>
+<button id="play" mat-button color="blue" (click)="animate()">Play</button>
+ 
+<div id="display"></div>
+

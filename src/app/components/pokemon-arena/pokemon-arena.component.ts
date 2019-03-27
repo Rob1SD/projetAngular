@@ -48,8 +48,8 @@ export class PokemonArenaComponent implements OnInit {
 
         })
 
-        this.enp = "ennemy_pokemon";
-        this.myp = "my_pokemon";
+        this.enp = "enpimg";
+        this.myp = "mypimg";
     }
 
     animate(){
@@ -64,12 +64,11 @@ export class PokemonArenaComponent implements OnInit {
         if (pokemon===this.pokemon2){
             await (async () => { 
                 for(var i = 0; i <= 3; i++){
-                    this.enp = "ennemy_pokemon_move";
+                    this.enp = "enpimgmove";
 
                     await this.delay(delayTime);
 
-                    // Do something after
-                    this.enp = "ennemy_pokemon";
+                    this.enp = "enpimg";
 
                     await this.delay(delayTime); 
                 }
@@ -78,12 +77,11 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.pokemon1) {
             await (async () => { 
                 for(var i = 0; i <= 3; i++){
-                    this.myp = "my_pokemon_move";
+                    this.myp = "mypimgmove";
 
                     await this.delay(delayTime);
 
-                    // Do something after
-                    this.myp = "my_pokemon";
+                    this.myp = "mypimg";
 
                     await this.delay(delayTime); 
                 }
@@ -93,10 +91,10 @@ export class PokemonArenaComponent implements OnInit {
 
     public death(pokemon : Pokemon) {
         if (pokemon === this.pokemon1) {
-            this.enp = "ennemy_pokemon_dead";
+            this.enp = "enpimgmove";
         }
         else if (pokemon === this.pokemon2) {
-            this.myp = "my_pokemon_dead";
+            this.myp = "mypimgmove";
         }
     }
 
