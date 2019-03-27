@@ -18,10 +18,12 @@ export class PokemonArenaComponent implements OnInit {
     enp : string;
     myp : string;
 
+    displayText: string;
+
     constructor(public poke: PokemonService) {
 
         const unsub = forkJoin(
-            poke.GetPokemonByName("pikachu"),
+            poke.GetPokemonByName("dialga"),
             poke.GetPokemonByName("caterpie")
         ).subscribe(obsArray => {
             this.pokemon1 = new Pokemon(obsArray[0]);
@@ -29,11 +31,13 @@ export class PokemonArenaComponent implements OnInit {
 
             unsub.unsubscribe();
 
-        })
+            this.enp = "enpimg";
+            this.myp = "mypimg";
 
-        this.enp = "enpimg";
-        this.myp = "mypimg";
-    }
+            this.displayText = ("Bienvenue dans le combat " + this.pokemon1.nom + " contre " + this.pokemon2.nom + "<br>");
+
+        })
+        }
 
     animate(){
         fight(this.pokemon1, this.pokemon2, this).then(() =>{
@@ -79,6 +83,9 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.pokemon2) {
             this.myp = "mypimgmove";
         }
+    }
+
+    public write(text : string) {
     }
 
     delay(ms: number) {
