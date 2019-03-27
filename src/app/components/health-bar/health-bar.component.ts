@@ -9,6 +9,7 @@ export class HealthBarComponent implements OnInit {
 
   @Input() current: number;
   @Input() max: number;
+  @Input() name: string;
 
   constructor() { }
 
