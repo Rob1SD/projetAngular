@@ -21,8 +21,8 @@ export class PokemonArenaComponent implements OnInit {
     constructor(public poke: PokemonService) {
 
         const unsub = forkJoin(
-            poke.GetPokemonByName("caterpie"),
-            poke.GetPokemonByName("pikachu")
+            poke.GetPokemonByName("pikachu"),
+            poke.GetPokemonByName("caterpie")
         ).subscribe(obsArray => {
             this.pokemon1 = new Pokemon(obsArray[0]);
             this.pokemon2 = new Pokemon(obsArray[1]);
@@ -51,7 +51,6 @@ export class PokemonArenaComponent implements OnInit {
 
                     await this.delay(delayTime);
 
-                    // Do something after
                     this.enp = "enpimg";
 
                     await this.delay(delayTime); 
@@ -65,7 +64,6 @@ export class PokemonArenaComponent implements OnInit {
 
                     await this.delay(delayTime);
 
-                    // Do something after
                     this.myp = "mypimg";
 
                     await this.delay(delayTime); 
@@ -76,10 +74,10 @@ export class PokemonArenaComponent implements OnInit {
 
     public death(pokemon : Pokemon) {
         if (pokemon === this.pokemon1) {
-            this.enp = "enpimgdead";
+            this.enp = "enpimgmove";
         }
         else if (pokemon === this.pokemon2) {
-            this.myp = "mypimgdead";
+            this.myp = "mypimgmove";
         }
     }
 

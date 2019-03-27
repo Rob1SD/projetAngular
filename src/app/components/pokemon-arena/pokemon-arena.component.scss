@@ -5,25 +5,17 @@
 }
 
 .enpimgmove {
-    display: none
-}
-
-.enpimgdead {
     display: none;
 }
 
 .mypimg {
-    width: 13vw;
     position: fixed;
+    width: 13%;
     left: 16vw;
     bottom: 8vw;
 }
 
 .mypimgmove {
-    display: none;
-}
-
-.mypimgdead {
     display: none;
 }
 
@@ -55,4 +47,18 @@
     background-image: url(https://wallpapercave.com/wp/ykV5YUr.png);
     background-size: 100% auto;
     background-position: center;
+}
+
+#hpbar1 {
+    left: 13%; 
+    top: 18%;  
+    position: fixed;
+    color:white;
+}
+
+#hpbar2 {
+    left: 44%; 
+    bottom: 20%;
+    color:white;
+    position: fixed;
 }
