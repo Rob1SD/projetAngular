@@ -26,7 +26,7 @@ export class PokemonArenaComponent implements OnInit {
         const min = 0;
         const posArray : number[] = [];
         for (let i = 0; i < 4; ++i){
-          const randomPos = Math.random() * (max - min) + min;
+          const randomPos = Math.floor(Math.random() * (max - min) + min);
           posArray.push(randomPos);
         }
 
@@ -41,7 +41,9 @@ export class PokemonArenaComponent implements OnInit {
           flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
       ).subscribe(attackArray => {
         this.pokemon1.setAttackList(attackArray);
+        //console.log(this.pokemon1.attackList);
       });
+
       poke.GetPokemonByName("caterpie").pipe(
             map(data => {
                 this.pokemon2 = new Pokemon(data);
@@ -51,7 +53,7 @@ export class PokemonArenaComponent implements OnInit {
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
         ).subscribe(attackArray => {
           this.pokemon2.setAttackList(attackArray);
-        });
+      });
 
         // const unsub = forkJoin(
         //     poke.GetPokemonByName("pikachu"),

@@ -78,6 +78,8 @@ function playerTurn(p1: Pokemon, p2: Pokemon) {
 }
 
 export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
+  console.log(p1.attackList)
+  console.log(p2.attackList)
     const player1: Pokemon = getFirstAttacker(p1, p2);
     const player2: Pokemon = player1 === p1 ? p2 : p1;
     let turn = 1;
