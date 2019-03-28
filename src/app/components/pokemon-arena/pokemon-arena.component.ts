@@ -19,15 +19,20 @@ export class PokemonArenaComponent implements OnInit {
     txt: string;
     enp: string;
     myp: string;
-    displayText: string;
 
     constructor(public poke: PokemonService, public battleService: BattleService, public statemanager: GameStateService) {
-        this.displayText = "";
     }
 
     ngOnInit() {
         this.enp = "enpimg";
         this.myp = "mypimg";
+        this.statemanager.StateClock.subscribe(state => {
+            //temporaire
+            var elem = document.getElementById('display');
+            elem.scrollTop = elem.scrollHeight;
+            if(state.Fight == "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken > 0) this.shake(this.battleService.PokemonTwo);
+            if(state.Fight == "P2Attack" && this.battleService.PokemonOne.lastDammageTaken > 0) this.shake(this.battleService.PokemonOne);
+        })
     }
 
     animate() {
@@ -65,10 +70,6 @@ export class PokemonArenaComponent implements OnInit {
         else if (pokemon === this.battleService.PokemonTwo) {
             this.myp = "mypimgmove";
         }
-    }
-    
-    public write(text : string, color: string = "black") {
-        this.displayText += text + "<br>";
     }
 
     delay(ms: number) {
