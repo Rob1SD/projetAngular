@@ -4,14 +4,17 @@ import { map, tap } from 'rxjs/operators';
 
 export type AppState = "None" | "FightStart" | "FightOngoing" | "FightPaused" | "PokemonOneWin" | "PokemonTwoWin";
 export type FightState = "P1Attack" | "P2Attack" | "None";
+export type EffectState = "None" | "Shake";
 
 export class State {
   public App: AppState;
   public Fight: FightState;
+  public Effect: EffectState;
 
-  constructor(app: AppState, fight: FightState) {
+  constructor(app: AppState, fight: FightState, effectState: EffectState = "None") {
     this.App = app;
     this.Fight = fight;
+    this.Effect = effectState;
   }
 }
 

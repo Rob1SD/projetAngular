@@ -25,14 +25,13 @@ export class BattleManagerComponent implements OnInit {
       const min = 0;
       const posArray: number[] = [];
       for (let i = 0; i < 4; ++i) {
-          let randomPos = Math.floor(Math.random() * (max - min) + min);
-          while (posArray.indexOf(randomPos) >= 0) {
-            randomPos = Math.floor(Math.random() * (max - min) + min);
-          }
-          posArray.push(randomPos);
+        let randomPos = Math.floor(Math.random() * (max - min) + min);
+        while (posArray.indexOf(randomPos) >= 0) {
+          randomPos = Math.floor(Math.random() * (max - min) + min);
+        }
+        posArray.push(randomPos);
       }
-
-        return data.moves.filter((val, idx) => posArray.includes(idx));
+      return data.moves.filter((val, idx) => posArray.includes(idx));
     }
 
     const pokemonGetter = (name: string, color: string = "blue") => this.poke.GetPokemonByName(name).pipe(
@@ -82,27 +81,23 @@ export class BattleManagerComponent implements OnInit {
       this.StateManager.ChangeState(new State("PokemonTwoWin", "None"));
       return;
     }
-    if(this.battleService.PokemonTwo.healthPoint <= 0) {
+    else if(this.battleService.PokemonTwo.healthPoint <= 0) {
       this.StateManager.ChangeState(new State("PokemonOneWin", "None"));
       return;
-    }
-    p1.attack(p2);
+    } else {
 
-    this.StateManager.ChangeState(
-      new State(this.StateManager.CurrentState().App, 
-      this.StateManager.CurrentState().Fight == "P1Attack" ? "P2Attack" : "P1Attack")
-    );
+      p1.attack(p2);
+      this.battleService.LoggerEmitter.next(p1.nom + " lance " + p1.lastAttaqueUsed.name);
+      if(p2.lastDammageTaken >= 0) this.battleService.LoggerEmitter.next(p2.nom + " perd " + p2.lastDammageTaken + " pdv <br>"); 
+      else this.battleService.LoggerEmitter.next(p1.nom + " rate son attaque !" + "<br>");
+      this.StateManager.ChangeState(
+        new State(this.StateManager.CurrentState().App, 
+        this.StateManager.CurrentState().Fight == "P1Attack" ? "P2Attack" : "P1Attack")
+        );
+    }
   }
 
   private getFirstAttacker(p1: Pokemon, p2: Pokemon) {
     return p1.speed > p2.speed ? "P1Attack" : "P2Attack";
   }
-
-  private getWinner(p1: Pokemon, p2: Pokemon) {
-    const winner = p1.healthPoint > 0 ? p1 : p2;
-    //state PokemonXWin
-    return winner;
-    
-  }
-
 }
