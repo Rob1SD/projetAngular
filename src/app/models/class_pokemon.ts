@@ -7,8 +7,6 @@ export class PokemonAttack {
   public pp : number;
   public damageClass : string;
   constructor(dataFromService) {
-    console.log("attaq");
-    console.log(dataFromService);
     this.name = dataFromService.names[6].name;
     this.power = dataFromService.power;
     this.pp = dataFromService.pp;
@@ -61,10 +59,8 @@ export class Pokemon {
     
     setAttackList(dataAttacks) {
       this.attackList = dataAttacks.map(data => {
-        return new PokemonAttack(data);
-    });
-
-
+          return new PokemonAttack(data);
+      });
     }
 
     attack(pokemon: Pokemon) {
@@ -72,7 +68,6 @@ export class Pokemon {
         const min = 0;
         const randomPos = Math.floor(Math.random() * (max - min) + min);
         this.Damage(pokemon, this.attackList[randomPos]);
-
     }
 
 
@@ -106,40 +101,4 @@ export class Pokemon {
     }
 }
 
-
-export function getFirstAttacker(p1: Pokemon, p2: Pokemon) {
-    return p1.speed > p2.speed ? p1 : p2;
-}
-
-function playerTurn(p1: Pokemon, p2: Pokemon) {
-
-}
-
-export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
-  console.log(p1.attackList)
-  console.log(p2.attackList)
-    const player1: Pokemon = getFirstAttacker(p1, p2);
-    const player2: Pokemon = player1 === p1 ? p2 : p1;
-    while (player1.healthPoint > 0 && player2.healthPoint > 0) {
-        await pause(player1, player2);
-
-        if (player2.healthPoint > 0) {
-            await pause(player2, player1);
-        }
-    }
-}
-
-export function getWinner(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
-    const winner = p1.healthPoint > 0 ? p1 : p2;
-    arenaComponent.death(winner);
-    return winner;
-    
-}
-
-function pause(p1: Pokemon, p2: Pokemon) {
-    return new Promise(resolve => setTimeout(() => {
-        p1.attack(p2);
-        resolve();
-    }, 1500));
-}
 
