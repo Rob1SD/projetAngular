@@ -33,7 +33,7 @@ export class GameStateService {
   private intervalStateFunc = () => interval(1500).pipe(
     tap(state => console.log(this.CurrentState())),
     map(() => this.CurrentState())
-  );
+  )
 
   //return the current state 
   public CurrentState = (): State => this.state;
