@@ -2,15 +2,21 @@ import { PokemonArenaComponent } from "../components/pokemon-arena/pokemon-arena
 export class PokemonAttack {
   public name : string;
   public power : number;
+  public accuracy : number;
   public ppActuel : number;
   public pp : number;
   public damageClass : string;
   constructor(dataFromService) {
+    console.log("attaq");
+    console.log(dataFromService);
     this.name = dataFromService.names[6].name;
     this.power = dataFromService.power;
     this.pp = dataFromService.pp;
+    this.accuracy = dataFromService.accuracy;
     this.ppActuel = dataFromService.pp;
     this.damageClass = dataFromService.damage_class.name;
+    if (this.accuracy === null)
+      this.accuracy =100;
 
   }
 }
@@ -36,6 +42,7 @@ export class Pokemon {
     constructor(dataFromService, color : string) {
       console.log(dataFromService)
         this.level = 1;
+        this.lastDammageTaken = 0;
         this.color = color;
         this.nom = dataFromService.name;
         this.speed = dataFromService.stats[0].base_stat;
@@ -48,8 +55,10 @@ export class Pokemon {
         this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
         this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
 
+
         // this.attackList = dataFromService.names[6].nameS
     }
+    
     setAttackList(dataAttacks) {
       this.attackList = dataAttacks.map(data => {
         return new PokemonAttack(data);
@@ -62,7 +71,6 @@ export class Pokemon {
         const max = 4;
         const min = 0;
         const randomPos = Math.floor(Math.random() * (max - min) + min);
-        console.log("randomPos : " + randomPos);
         this.Damage(pokemon, this.attackList[randomPos]);
 
     }
@@ -79,9 +87,20 @@ export class Pokemon {
     }
 
     public Damage(target: Pokemon, attack: PokemonAttack ) {
+        this.lastAttaqueUsed = attack;
+
+        if (attack.accuracy < 100) {
+          const max = 100;
+          const min = 0;
+          const randomValue = Math.floor(Math.random() * (max - min) + min);
+          if (randomValue > attack.accuracy) {
+            target.lastDammageTaken = -1;
+            return;
+          }
+        }
         const dmgTaken = this.CoreDamage(target, attack)/50;
         const tmpHealth = Math.floor(target.healthPoint - dmgTaken);
-        this.lastAttaqueUsed = attack;
+
         target.lastDammageTaken = Math.floor(dmgTaken);
         target.healthPoint = tmpHealth > 0 ? tmpHealth : 0;
     }
@@ -102,17 +121,32 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
     const player1: Pokemon = getFirstAttacker(p1, p2);
     const player2: Pokemon = player1 === p1 ? p2 : p1;
     let turn = 1;
+    arenaComponent.write(new Date().toDateString());
     while (player1.healthPoint > 0 && player2.healthPoint > 0) {
         arenaComponent.write('===Tour : ' + turn + '===');
         await pause(player1, player2);
-        await arenaComponent.shake(player2);
-        arenaComponent.write(player1.nom + ' lance '+ player1.lastAttaqueUsed.name + " sur " + player2.nom, player1.color);
-        arenaComponent.write(player2.nom + ' perd ' + player2.lastDammageTaken + ' hp');
+
+        arenaComponent.write(player1.nom + ' lance '+ player1.lastAttaqueUsed.name, player1.color);
+        if (player2.lastDammageTaken > -1) {
+          await arenaComponent.shake(player2);
+          arenaComponent.write(player2.nom + ' perd ' + player2.lastDammageTaken + ' hp');
+        }
+        else {
+          arenaComponent.write(player1.nom + ' rate son attaque !');
+        }
+
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
+
+          arenaComponent.write(player2.nom + ' lance '+ player2.lastAttaqueUsed.name, player2.color);
+          if (player1.lastDammageTaken > -1) {
             await arenaComponent.shake(player1);
-          arenaComponent.write(player2.nom + ' lance '+ player2.lastAttaqueUsed.name + " sur " + player1.nom, player2.color);
-          arenaComponent.write(player1.nom + ' perd ' + player1.lastDammageTaken + ' hp');
+            arenaComponent.write(player1.nom + ' perd ' + player1.lastDammageTaken + ' hp');
+          }
+          else {
+            arenaComponent.write(player2.nom + ' rate son attaque !');
+          }
+
 
         }
         ++turn;

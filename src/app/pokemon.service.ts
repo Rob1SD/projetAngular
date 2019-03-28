@@ -22,4 +22,7 @@ export class PokemonService {
    public GetPokemonAttackUrl(url : string)  {
      return this.http.get(url);
    }
+  public GetPokemonSpeciesUrl(url : string)  {
+    return this.http.get(url);
+  }
 }

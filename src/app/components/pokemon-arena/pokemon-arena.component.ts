@@ -40,7 +40,7 @@ export class PokemonArenaComponent implements OnInit {
             return data.moves.filter((val, idx) => posArray.includes(idx));
         }
 
-        const p1 = poke.GetPokemonByName("blastoise").pipe(
+        const p1 = poke.GetPokemonByName("bulbasaur").pipe(
 
             map(data => {
                 this.pokemon1 = new Pokemon(data, "blue");
@@ -49,7 +49,7 @@ export class PokemonArenaComponent implements OnInit {
             flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
         );
 
-        const p2 = poke.GetPokemonByName("charizard").pipe(
+        const p2 = poke.GetPokemonByName("pikachu").pipe(
 
             map(data => {
                 this.pokemon2 = new Pokemon(data, "red");
