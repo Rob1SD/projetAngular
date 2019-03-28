@@ -21,11 +21,12 @@ export class PokemonArenaComponent implements OnInit {
     displayText: string;
 
     constructor(public poke: PokemonService) {
-
-
         this.displayText = "";
+    }
+
+    ngOnInit() {
         
-        const fillAttackList = function (data) {
+        const fillAttackList = (data: IPokemon) => {
             const max = data.moves.length;
             const min = 0;
             const posArray: number[] = [];
@@ -40,27 +41,26 @@ export class PokemonArenaComponent implements OnInit {
             return data.moves.filter((val, idx) => posArray.includes(idx));
         }
 
-        const p1 = poke.GetPokemonByName("bulbasaur").pipe(
-
+        const pokemonGetter = (name: string, color: string = "blue") => this.poke.GetPokemonByName(name).pipe(
             map(data => {
-                this.pokemon1 = new Pokemon(data, "blue");
-                return fillAttackList(data);
+                const pokemon = new Pokemon(data, color);
+                return { attacks: fillAttackList(data), pokemon };
             }),
-            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
+            flatMap(dataArr => {
+                let mapedArray = dataArr.attacks.map(val => this.poke.GetPokemonAttackUrl(val.move.url));
+                mapedArray.unshift(of(dataArr.pokemon));
+                return forkJoin(mapedArray);
+            })
         );
 
-        const p2 = poke.GetPokemonByName("pikachu").pipe(
-
-            map(data => {
-                this.pokemon2 = new Pokemon(data, "red");
-                return fillAttackList(data);
-            }),
-            flatMap(dataArr => forkJoin(dataArr.map(val => poke.GetPokemonAttackUrl(val.move.url))))
-
-        );
-
-        forkJoin(p1,p2).subscribe(ar => {
+        forkJoin(pokemonGetter("bulbasaur"),pokemonGetter("pikachu")).subscribe(ar => {
+            //"bulbasaur"
+            const pokeData1 = ar[0];
+            this.pokemon1 = pokeData1.shift() as Pokemon;
             this.pokemon1.setAttackList(ar[0]);
+
+            const pokeData2 = ar[1];
+            this.pokemon2 = pokeData2.shift() as Pokemon;
             this.pokemon2.setAttackList(ar[1]);
             //afficher message chargé
         });
@@ -78,32 +78,25 @@ export class PokemonArenaComponent implements OnInit {
 
     public async shake(pokemon: Pokemon) {
         const delayTime = 80;
-        if (pokemon === this.pokemon2) {
             await (async () => {
                 for (var i = 0; i <= 3; i++) {
-                    this.enp = "enpimgmove";
+                    if (pokemon === this.pokemon2) {
 
-                    await this.delay(delayTime);
+                        this.enp = "enpimgmove";
+                        await this.delay(delayTime);
+                        this.enp = "enpimg";
+                        await this.delay(delayTime);
 
-                    this.enp = "enpimg";
+                    } else if (pokemon === this.pokemon1) {
 
-                    await this.delay(delayTime);
+                        this.myp = "mypimgmove";
+                        await this.delay(delayTime);
+                        this.myp = "mypimg";
+                        await this.delay(delayTime);
+
+                    }
                 }
             })();
-        }
-        else if (pokemon === this.pokemon1) {
-            await (async () => {
-                for (var i = 0; i <= 3; i++) {
-                    this.myp = "mypimgmove";
-
-                    await this.delay(delayTime);
-
-                    this.myp = "mypimg";
-
-                    await this.delay(delayTime);
-                }
-            })();
-        }
     }
 
     public death(pokemon: Pokemon) {
@@ -121,8 +114,5 @@ export class PokemonArenaComponent implements OnInit {
 
     delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    ngOnInit() {
     }
 }

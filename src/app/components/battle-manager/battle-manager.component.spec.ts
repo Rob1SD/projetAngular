@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BattleMenuComponent } from './battle-menu.component';
+import { BattleManagerComponent } from './battle-manager.component';
 
-describe('BattleMenuComponent', () => {
-  let component: BattleMenuComponent;
-  let fixture: ComponentFixture<BattleMenuComponent>;
+describe('BattleManagerComponent', () => {
+  let component: BattleManagerComponent;
+  let fixture: ComponentFixture<BattleManagerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BattleMenuComponent ]
+      declarations: [ BattleManagerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BattleMenuComponent);
+    fixture = TestBed.createComponent(BattleManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

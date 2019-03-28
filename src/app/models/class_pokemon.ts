@@ -120,61 +120,26 @@ export async function fight(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonAr
   console.log(p2.attackList)
     const player1: Pokemon = getFirstAttacker(p1, p2);
     const player2: Pokemon = player1 === p1 ? p2 : p1;
-    let turn = 1;
-    arenaComponent.write(new Date().toDateString());
     while (player1.healthPoint > 0 && player2.healthPoint > 0) {
-        arenaComponent.write('===Tour : ' + turn + '===');
         await pause(player1, player2);
-
-        arenaComponent.write(player1.nom + ' lance '+ player1.lastAttaqueUsed.name, player1.color);
-        if (player2.lastDammageTaken > -1) {
-          await arenaComponent.shake(player2);
-          arenaComponent.write(player2.nom + ' perd ' + player2.lastDammageTaken + ' hp');
-        }
-        else {
-          arenaComponent.write(player1.nom + ' rate son attaque !');
-        }
 
         if (player2.healthPoint > 0) {
             await pause(player2, player1);
-
-          arenaComponent.write(player2.nom + ' lance '+ player2.lastAttaqueUsed.name, player2.color);
-          if (player1.lastDammageTaken > -1) {
-            await arenaComponent.shake(player1);
-            arenaComponent.write(player1.nom + ' perd ' + player1.lastDammageTaken + ' hp');
-          }
-          else {
-            arenaComponent.write(player2.nom + ' rate son attaque !');
-          }
-
-
         }
-        ++turn;
-
     }
-
-
-
 }
+
 export function getWinner(p1: Pokemon, p2: Pokemon, arenaComponent : PokemonArenaComponent) {
     const winner = p1.healthPoint > 0 ? p1 : p2;
     arenaComponent.death(winner);
     return winner;
     
 }
+
 function pause(p1: Pokemon, p2: Pokemon) {
     return new Promise(resolve => setTimeout(() => {
         p1.attack(p2);
         resolve();
     }, 1500));
 }
-
-// let pika = new Pokemon ("Pikachu",90,22, 100);
-// let sala = new Pokemon("Salameche",80,22,110);
-// let winner = new Pokemon("toto",80,22,110);
-//
-// fight(pika,sala).then(function(){
-//     winner = getWinner(pika,sala);
-//     console.log("le gagnant est " + winner.nom);
-// });
 
