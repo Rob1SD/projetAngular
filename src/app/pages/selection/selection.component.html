@@ -1,0 +1,23 @@
+<h2>Liste des pokemon</h2>
+
+<div id="pokechoice1">
+  <h3>Choix pokemon 1</h3>
+  <ul id="pokemons_1" class="pokelist">
+    <li class="pokelement" [ngClass]="pokemon.selected ? 'selected': ''" *ngFor="let pokemon of pokeList" (click)="onPokelement()">
+      <span class="image"><img src='{{ pokemon.frontImage }}'></span><br>
+      <span class="name">{{ pokemon.nom }}</span>
+    </li>
+  </ul>
+</div>
+
+<div id="pokechoice2">
+  <h3>Choix pokemon 2</h3>
+  <ul id="pokemons_2" class="pokelist">
+    <li class="pokelement" [ngClass]="pokemon.selected ? 'selected': ''" *ngFor="let pokemon of pokeList">
+      <img src='{{ pokemon.frontImage }}'><br>
+      {{ pokemon.nom }}
+    </li>
+  </ul>
+</div>
+
+<button id="select" mat-button color="blue">Play</button>

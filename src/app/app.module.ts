@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { HealthBarComponent } from './components/health-bar/health-bar.component';
 import { CommonModule } from '@angular/common';
 import { BattleManagerComponent } from './components/battle-manager/battle-manager.component';
+import { SelectionComponent } from './pages/selection/selection.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { BattleManagerComponent } from './components/battle-manager/battle-manag
     PokemonArenaComponent,
     HealthBarComponent,
     BattleManagerComponent,
+    SelectionComponent,
   ],
   imports: [
     BrowserModule,

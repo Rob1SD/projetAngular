@@ -1,0 +1,57 @@
+li {
+    list-style-type: none;
+    margin: 0;
+}
+
+ul {
+    padding: 0;
+}
+
+#pokechoice1{
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+#pokechoice2{
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+#pokemons_1{
+    width: 30%;
+    padding-left: 35%;
+    text-align: center;
+}
+
+#pokemons_2{
+    width: 30%;
+    padding-left: 35%;
+    text-align: center;
+}
+
+.pokelement {
+    background-color: white;
+    margin-bottom: 6%;
+    border-radius: 15px;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+li :hover{
+    background-color: grey;
+}
+
+li.selected {
+    background-color: grey;
+}
+
+#select {
+    position: fixed;
+    bottom: 10%;
+    left: 35%;
+    background-color: darkred;
+    color: white;
+    width: 30%;
+}
