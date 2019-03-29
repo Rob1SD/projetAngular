@@ -17,9 +17,12 @@ export class BattleManagerComponent implements OnInit {
   @Input() PokemonOneName: string;
   @Input() PokemonTwoName: string;
 
+  tourNumber : number;
   subscription : Subscription;
 
-  constructor(public battleService: BattleService, public poke: PokemonService, public StateManager: GameStateService) { }
+  constructor(public battleService: BattleService, public poke: PokemonService, public StateManager: GameStateService) {
+    this.tourNumber = 1;
+  }
 
   ngOnInit() {
     const fillAttackList = (data: IPokemon) => {
@@ -41,10 +44,6 @@ export class BattleManagerComponent implements OnInit {
             const pokemon = new Pokemon(data, color);
             return { attacks: fillAttackList(data), pokemon, species : data.species};
         }),
-        // flatMap(dataArr => {
-        //   let mapedArray = this.poke.GetPokemonSpeciesUrl(dataArr.species.url);
-        //
-        // }),
         flatMap(dataArr => {
           console.log("dataArr");
           console.log(dataArr);
@@ -91,6 +90,8 @@ export class BattleManagerComponent implements OnInit {
   private dispatch(data: State) {
     switch(data.App) {
       case "FightStart":
+      this.battleService.LoggerEmitter.next("===" + new Date().toDateString() + "===");
+      this.battleService.LoggerEmitter.next("===========================");
       const p1 = this.battleService.PokemonOne;
       const p2 = this.battleService.PokemonTwo;
       const newState = this.getFirstAttacker(p1, p2);
@@ -99,7 +100,11 @@ export class BattleManagerComponent implements OnInit {
 
       case "FightOngoing":
       if(data.Fight === "P1Attack") this.fight(this.battleService.PokemonOne, this.battleService.PokemonTwo);
-      else if(data.Fight === "P2Attack") this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
+      else if(data.Fight === "P2Attack") {
+        this.battleService.LoggerEmitter.next("=== Tour " + this.tourNumber + " ===");
+        this.tourNumber++;
+        this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
+      }
       break;
       
       default:
