@@ -5,6 +5,11 @@ import { SelectionComponent } from './pages/selection/selection.component';
 
 const routes: Routes = [
     {
+        path: '',
+        pathMatch: "full",
+        redirectTo: 'selection'
+    },
+    {
         path: 'selection',
         component : SelectionComponent
     },
