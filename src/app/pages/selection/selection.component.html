@@ -20,4 +20,5 @@
   </ul>
 </div>
 
-<button id="select" mat-button color="blue">Play</button>
+<button id="select" mat-button color="blue" (click)="validate()">Play</button>
+<p id="error">{{ errorMessage }}</p>

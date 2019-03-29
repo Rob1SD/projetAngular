@@ -5,6 +5,7 @@ import { Pokemon } from 'src/app/models/class_pokemon';
 import { of, forkJoin } from 'rxjs';
 import { PokemonService } from 'src/app/pokemon.service';
 import { BattleService } from 'src/app/battle.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-selection',
@@ -14,8 +15,9 @@ import { BattleService } from 'src/app/battle.service';
 export class SelectionComponent implements OnInit {
 
   pokeList : Pokemon[];
+  errorMessage : string;
   
-  constructor(public poke: PokemonService, public battleService: BattleService) { }
+  constructor(public poke: PokemonService, public battleService: BattleService, public router: Router, public route: ActivatedRoute) { }
 
   ngOnInit() {
     const fillAttackList = (data: IPokemon) => {
@@ -65,16 +67,45 @@ export class SelectionComponent implements OnInit {
     }
     
     if(select == 1) {
+      var selected = pokemon.selected1;
       this.pokeList.forEach(element => {
         element.selected1 = false;
       });
-      pokemon.selected1 = true;
+      pokemon.selected1 = !selected;
     }
     else if (select == 2) {
+      var selected = pokemon.selected2;
       this.pokeList.forEach(element => {
         element.selected2 = false;
       });
-      pokemon.selected2 = true;
+      pokemon.selected2 = !selected;
+    }
+  }
+
+  validate() {
+    this.errorMessage = "";
+
+    var poke1 : Pokemon;
+    var poke2 : Pokemon;
+
+    this.pokeList.forEach(element => {
+      if(element.selected1) {
+        poke1 = element;
+      }
+      if (element.selected2) {
+        poke2 = element;
+      }
+    });
+
+    console.log(poke1);
+    console.log(poke2);
+
+    if(poke1 == null || poke2 == null) {
+        this.errorMessage = "Il manque un ou deux pokemons !";
+        return;
+    }
+    else {
+      this.router.navigate([`../${poke1.nom}/${poke2.nom}`], { relativeTo: this.route });
     }
   }
 }
