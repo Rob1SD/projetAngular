@@ -7,7 +7,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { compileNgModule } from '@angular/core/src/render3/jit/module';
 import { BattleService } from 'src/app/battle.service';
 import { GameStateService, State } from 'src/app/game-state.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class PokemonArenaComponent implements OnInit {
     private subscription : Subscription;
 
     constructor(public poke: PokemonService, public battleService: BattleService, 
-        public statemanager: GameStateService, public activatedRoute: ActivatedRoute) 
+        public statemanager: GameStateService, public activatedRoute: ActivatedRoute, public router : Router) 
     {
         this.activatedRoute.params.subscribe(x => {
             console.log(x);
@@ -53,6 +53,10 @@ export class PokemonArenaComponent implements OnInit {
     animate() {
         const current = this.statemanager.CurrentState;
         this.statemanager.ChangeState(new State("FightStart", current.Fight));
+    }
+
+    back() {
+        this.router.navigate([`../../selection`], { relativeTo: this.activatedRoute });
     }
 
     public async shake(pokemon: Pokemon) {
