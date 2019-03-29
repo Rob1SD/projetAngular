@@ -56,6 +56,8 @@ export class PokemonArenaComponent implements OnInit {
     }
 
     back() {
+        this.statemanager.ChangeState(new State("None", "None"));
+        this.subscription.unsubscribe();
         this.router.navigate([`../../selection`], { relativeTo: this.activatedRoute });
     }
 
