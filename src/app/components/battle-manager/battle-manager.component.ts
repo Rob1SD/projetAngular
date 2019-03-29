@@ -3,7 +3,7 @@ import { BattleService } from 'src/app/battle.service';
 import {IPokemon, ISpecies} from 'src/app/models/IPokemon';
 import { map, flatMap, tap } from 'rxjs/operators';
 import { Pokemon } from 'src/app/models/class_pokemon';
-import { of, forkJoin } from 'rxjs';
+import { of, forkJoin, Subscription } from 'rxjs';
 import { PokemonService } from 'src/app/pokemon.service';
 import { GameStateService, State, FightState } from 'src/app/game-state.service';
 import { dispatch } from 'rxjs/internal/observable/pairs';
@@ -16,6 +16,8 @@ export class BattleManagerComponent implements OnInit {
 
   @Input() PokemonOneName: string;
   @Input() PokemonTwoName: string;
+
+  subscription : Subscription;
 
   constructor(public battleService: BattleService, public poke: PokemonService, public StateManager: GameStateService) { }
 
@@ -79,7 +81,11 @@ export class BattleManagerComponent implements OnInit {
         //afficher message chargé
     });
 
-    this.StateManager.StateClock.subscribe(data => this.dispatch(data));
+    this.subscription = this.StateManager.StateClock.subscribe(data => this.dispatch(data));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private dispatch(data: State) {

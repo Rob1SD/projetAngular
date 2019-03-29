@@ -39,10 +39,6 @@ ul {
     padding-bottom: 5%;
 }
 
-li :hover{
-    background-color: grey;
-}
-
 li.selected {
     background-color: grey;
 }
@@ -54,4 +50,12 @@ li.selected {
     background-color: darkred;
     color: white;
     width: 30%;
+}
+
+#error {
+    color: red;
+    position: fixed;
+    bottom: 3%;
+    width: 100%;
+    text-align: center;
 }
