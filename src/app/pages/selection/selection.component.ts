@@ -6,6 +6,7 @@ import { of, forkJoin } from 'rxjs';
 import { PokemonService } from 'src/app/pokemon.service';
 import { BattleService } from 'src/app/battle.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { PokemonPreview } from 'src/app/models/pokemon_preview';
 
 @Component({
   selector: 'app-selection',
@@ -14,54 +15,23 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class SelectionComponent implements OnInit {
 
-  pokeList : Pokemon[];
+  pokeList : PokemonPreview[];
   errorMessage : string;
   
   constructor(public poke: PokemonService, public battleService: BattleService, public router: Router, public route: ActivatedRoute) { }
 
   ngOnInit() {
-    const fillAttackList = (data: IPokemon) => {
-      const max = data.moves.length;
-      const min = 0;
-      const posArray: number[] = [];
-      for (let i = 0; i < 4; ++i) {
-        let randomPos = Math.floor(Math.random() * (max - min) + min);
-        while (posArray.indexOf(randomPos) >= 0) {
-          randomPos = Math.floor(Math.random() * (max - min) + min);
-        }
-        posArray.push(randomPos);
-      }
-      return data.moves.filter((val, idx) => posArray.includes(idx));
-    }
-
-    const pokemonGetter = (name: string, color: string = "blue") => this.poke.GetPokemonByName(name).pipe(
-        map(data => {
-            const pokemon = new Pokemon(data, color);
-            return { attacks: fillAttackList(data), pokemon };
-        }),
-        flatMap(dataArr => {
-            let mapedArray = dataArr.attacks.map(val => this.poke.GetPokemonAttackUrl(val.move.url));
-            mapedArray.unshift(of(dataArr.pokemon));
-            return forkJoin(mapedArray);
-
-        })
-    );
-
-    forkJoin(pokemonGetter("pikachu"),pokemonGetter("mew")).subscribe(ar => {
-        const pokeData1 = ar[0];
-        this.battleService.PokemonOne = pokeData1.shift() as Pokemon;
-        this.battleService.PokemonOne.setAttackList(ar[0]);
-        console.log(this.battleService.PokemonOne.attackList);
-
-        const pokeData2 = ar[1];
-        this.battleService.PokemonTwo = pokeData2.shift() as Pokemon;
-        this.battleService.PokemonTwo.setAttackList(ar[1]);
-        console.log(this.battleService.PokemonTwo.attackList);
-        this.pokeList = [this.battleService.PokemonOne, this.battleService.PokemonTwo];
+    this.pokeList = [];
+    var service = this.poke.GetPokemonList().subscribe((data: { results:any[]}) => {
+      console.log(data);
+      data.results.forEach(element => {
+        this.pokeList.push(new PokemonPreview(element.name));
+      });
+      service.unsubscribe();
     });
   }
 
-  onPokelement(pokemon : Pokemon, select : number) {
+  onPokelement(pokemon : PokemonPreview, select : number) {
     if(select != 1 && select != 2) {
       throw new Error("Select should be 1 or 2");
     }
@@ -85,8 +55,8 @@ export class SelectionComponent implements OnInit {
   validate() {
     this.errorMessage = "";
 
-    var poke1 : Pokemon;
-    var poke2 : Pokemon;
+    var poke1 : PokemonPreview;
+    var poke2 : PokemonPreview;
 
     this.pokeList.forEach(element => {
       if(element.selected1) {

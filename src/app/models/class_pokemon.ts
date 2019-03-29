@@ -34,8 +34,6 @@ export class Pokemon {
     public attackList: PokemonAttack[];
     public lastAttaqueUsed : PokemonAttack;
     public color : string;
-    public selected1 : boolean;
-    public selected2 : boolean;
 
 
     constructor(dataFromService, color : string) {
@@ -53,8 +51,6 @@ export class Pokemon {
         this.defenseSpe = dataFromService.stats[1].base_stat;
         this.frontImage = "https://play.pokemonshowdown.com/sprites/xyani/"+this.nom+".gif";
         this.backImage = "https://play.pokemonshowdown.com/sprites/xyani-back/"+this.nom+".gif";
-        this.selected1 = false;
-        this.selected2 = false;
 
 
         // this.attackList = dataFromService.names[6].nameS

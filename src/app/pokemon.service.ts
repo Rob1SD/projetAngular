@@ -26,6 +26,6 @@ export class PokemonService {
     return this.http.get(url);
   }
   public GetPokemonList()  {
-    return this.http.get("https://pokeapi.co/api/v2/pokemon/");
+    return this.http.get("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=1000");
   }
 }

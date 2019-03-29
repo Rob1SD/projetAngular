@@ -11,12 +11,16 @@ ul {
     width: 50%;
     float: left;
     text-align: center;
+    overflow: scroll;
+    height: 80vh;
 }
 
 #pokechoice2{
     float: left;
     width: 50%;
     text-align: center;
+    overflow: scroll;
+    height: 80vh;
 }
 
 #pokemons_1{
