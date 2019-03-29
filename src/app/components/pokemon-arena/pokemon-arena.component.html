@@ -27,5 +27,5 @@
 <button id="play" mat-button color="blue" (click)="animate()">Play</button>
  
 <div id="display" [innerHTML]="battleService.Logger | async"></div>
-<app-battle-manager [PokemonOneName]="'bulbasaur'" [PokemonTwoName]="'pikachu'"></app-battle-manager>
+<app-battle-manager [PokemonOneName]="p1Chosen | async" [PokemonTwoName]="p2Chosen | async"></app-battle-manager>
 

@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
 import { Pokemon } from "../../models/class_pokemon";
-import { forkJoin, of } from "rxjs";
+import { forkJoin, of, Observable } from "rxjs";
 import { flatMap, map } from 'rxjs/operators';
 import { compileNgModule } from '@angular/core/src/render3/jit/module';
 import { BattleService } from 'src/app/battle.service';
 import { GameStateService, State } from 'src/app/game-state.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -16,11 +17,20 @@ import { GameStateService, State } from 'src/app/game-state.service';
 })
 export class PokemonArenaComponent implements OnInit {
 
-    txt: string;
-    enp: string;
-    myp: string;
+    public txt: string;
+    public enp: string;
+    public myp: string;
+    public p1Chosen: Observable<string>;
+    public p2Chosen: Observable<string>;
 
-    constructor(public poke: PokemonService, public battleService: BattleService, public statemanager: GameStateService) {
+    constructor(public poke: PokemonService, public battleService: BattleService, 
+        public statemanager: GameStateService, public activatedRoute: ActivatedRoute) 
+    {
+        this.activatedRoute.params.subscribe(x => {
+            console.log(x);
+            this.p1Chosen = of(x.pokemon1);
+            this.p2Chosen = of(x.pokemon2);
+        });
     }
 
     ngOnInit() {
