@@ -30,13 +30,13 @@ export class PokemonArenaComponent implements OnInit {
             //temporaire
             var elem = document.getElementById('display');
             elem.scrollTop = elem.scrollHeight;
-            if(state.Fight == "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken > 0) this.shake(this.battleService.PokemonTwo);
-            if(state.Fight == "P2Attack" && this.battleService.PokemonOne.lastDammageTaken > 0) this.shake(this.battleService.PokemonOne);
+            if(state.Fight == "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken) this.shake(this.battleService.PokemonTwo);
+            if(state.Fight == "P2Attack" && this.battleService.PokemonOne.lastDammageTaken) this.shake(this.battleService.PokemonOne);
         })
     }
 
     animate() {
-        const current = this.statemanager.CurrentState();
+        const current = this.statemanager.CurrentState;
         this.statemanager.ChangeState(new State("FightStart", current.Fight));
     }
 
@@ -61,15 +61,6 @@ export class PokemonArenaComponent implements OnInit {
                     }
                 }
             })();
-    }
-
-    public death(pokemon: Pokemon) {
-        if (pokemon === this.battleService.PokemonOne) {
-            this.enp = "enpimgmove";
-        }
-        else if (pokemon === this.battleService.PokemonTwo) {
-            this.myp = "mypimgmove";
-        }
     }
 
     delay(ms: number) {

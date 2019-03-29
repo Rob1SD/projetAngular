@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, interval } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, interval, BehaviorSubject } from 'rxjs';
+import { map, tap, share } from 'rxjs/operators';
 
 export type AppState = "None" | "FightStart" | "FightOngoing" | "FightPaused" | "PokemonOneWin" | "PokemonTwoWin";
 export type FightState = "P1Attack" | "P2Attack" | "None";
@@ -23,24 +23,22 @@ export class State {
 })
 export class GameStateService {
 
-  private state: State;
+  private gamestate: BehaviorSubject<State> = new BehaviorSubject<State>(new State("None", "None"));
+
+  public get CurrentState() {
+    return this.gamestate.value;
+  }
 
   public StateClock: Observable<State>;
   
   constructor() {
-    this.state = new State("None", "None");
-    this.StateClock = this.intervalStateFunc();
+    this.StateClock = interval(1500).pipe(
+      tap(() => console.log(this.CurrentState)),
+      map(() => this.CurrentState),
+      share()
+    );
   }
 
-  //observer wich publish the current state of the game every seconds 
-  private intervalStateFunc = () => interval(1500).pipe(
-    tap(state => console.log(this.CurrentState())),
-    map(() => this.CurrentState())
-  );
-
-  //return the current state 
-  public CurrentState = (): State => this.state;
-
   //change the current state
-  public ChangeState = (newState: State) => this.state = newState;
+  public ChangeState = (state: State) => this.gamestate.next(state);
 }

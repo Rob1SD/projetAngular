@@ -1,17 +1,17 @@
 <img id="background" src="https://backgroundcheckall.com/wp-content/uploads/2017/12/pokemon-battle-background-6.png">
        
 
-<img class={{enp}} *ngIf="statemanager.CurrentState().App != 'PokemonOneWin'" src={{battleService.PokemonTwo?.frontImage}}>
+<img class={{enp}} *ngIf="statemanager.CurrentState.App != 'PokemonOneWin'" src={{battleService.PokemonTwo?.frontImage}}>
 
 
-<img class={{myp}} *ngIf="statemanager.CurrentState().App != 'PokemonTwoWin'"  src={{battleService.PokemonOne?.backImage}}>
+<img class={{myp}} *ngIf="statemanager.CurrentState.App != 'PokemonTwoWin'"  src={{battleService.PokemonOne?.backImage}}>
 
 <span *ngIf="battleService.PokemonOne != null && battleService.PokemonTwo != null">
     <app-health-bar 
     [current]="battleService.PokemonTwo.healthPoint" 
     [max]="battleService.PokemonTwo.totalHealthPoint" 
     [name]="battleService.PokemonTwo.nom"
-    *ngIf="statemanager.CurrentState().App != 'PokemonOneWin'" 
+    *ngIf="statemanager.CurrentState.App != 'PokemonOneWin'" 
     id="hpbar1">
     </app-health-bar>
 
@@ -19,7 +19,7 @@
     [current]="battleService.PokemonOne.healthPoint" 
     [max]="battleService.PokemonOne.totalHealthPoint" 
     [name]="battleService.PokemonOne.nom"
-    *ngIf="statemanager.CurrentState().App != 'PokemonTwoWin'" 
+    *ngIf="statemanager.CurrentState.App != 'PokemonTwoWin'" 
     id="hpbar2">
     </app-health-bar>
 </span>

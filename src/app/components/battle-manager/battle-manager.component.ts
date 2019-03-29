@@ -5,7 +5,7 @@ import { map, flatMap, tap } from 'rxjs/operators';
 import { Pokemon } from 'src/app/models/class_pokemon';
 import { of, forkJoin } from 'rxjs';
 import { PokemonService } from 'src/app/pokemon.service';
-import { GameStateService, State } from 'src/app/game-state.service';
+import { GameStateService, State, FightState } from 'src/app/game-state.service';
 import { dispatch } from 'rxjs/internal/observable/pairs';
 
 @Component({
@@ -91,9 +91,21 @@ export class BattleManagerComponent implements OnInit {
       if(p2.lastDammageTaken >= 0) this.battleService.LoggerEmitter.next(p2.nom + " perd " + p2.lastDammageTaken + " pdv <br>"); 
       else this.battleService.LoggerEmitter.next(p1.nom + " rate son attaque !" + "<br>");
       this.StateManager.ChangeState(
-        new State(this.StateManager.CurrentState().App, 
-        this.StateManager.CurrentState().Fight == "P1Attack" ? "P2Attack" : "P1Attack")
-        );
+        new State(this.StateManager.CurrentState.App, this.GetNextAttaquant(this.StateManager.CurrentState.Fight))
+      )
+    }
+  }
+
+  private GetNextAttaquant(state: FightState) {
+    switch (state) {
+      case "P1Attack": 
+      return "P2Attack";
+
+      case "P2Attack": 
+      return "P1Attack";
+
+      default:
+      return "None";
     }
   }
 
