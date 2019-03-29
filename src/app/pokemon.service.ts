@@ -25,4 +25,7 @@ export class PokemonService {
   public GetPokemonSpeciesUrl(url : string)  {
     return this.http.get(url);
   }
+  public GetPokemonList()  {
+    return this.http.get("https://pokeapi.co/api/v2/pokemon/");
+  }
 }

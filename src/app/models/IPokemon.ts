@@ -17,7 +17,14 @@ export interface IPokemon {
     types: Type[];
     weight: number;
   }
-  
+  export interface ISpecies {
+    color : IColor;
+
+  }
+  export interface IColor {
+    name: string;
+    url: string;
+  }
   interface Type {
     slot: number;
     type: NamedResource;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BattleService } from 'src/app/battle.service';
-import { IPokemon } from 'src/app/models/IPokemon';
+import {IPokemon, ISpecies} from 'src/app/models/IPokemon';
 import { map, flatMap, tap } from 'rxjs/operators';
 import { Pokemon } from 'src/app/models/class_pokemon';
 import { of, forkJoin } from 'rxjs';
@@ -37,24 +37,44 @@ export class BattleManagerComponent implements OnInit {
     const pokemonGetter = (name: string, color: string = "blue") => this.poke.GetPokemonByName(name).pipe(
         map(data => {
             const pokemon = new Pokemon(data, color);
-            return { attacks: fillAttackList(data), pokemon };
+            return { attacks: fillAttackList(data), pokemon, species : data.species};
         }),
+        // flatMap(dataArr => {
+        //   let mapedArray = this.poke.GetPokemonSpeciesUrl(dataArr.species.url);
+        //
+        // }),
         flatMap(dataArr => {
-            let mapedArray = dataArr.attacks.map(val => this.poke.GetPokemonAttackUrl(val.move.url));
-            mapedArray.unshift(of(dataArr.pokemon));
-            return forkJoin(mapedArray);
+          console.log("dataArr");
+          console.log(dataArr);
+          const mapedArray = dataArr.attacks.map(val => this.poke.GetPokemonAttackUrl(val.move.url));
+          const pokecolor = this.poke.GetPokemonSpeciesUrl(dataArr.species.url).subscribe((data : ISpecies) => {
+            console.log("data")
+            console.log(data)
+            dataArr.pokemon.color = data.color.name;
+          });
+          console.log("pokecolor")
+          console.log(pokecolor)
+          mapedArray.unshift(of(dataArr.pokemon));
+          return forkJoin( mapedArray);
         })
+
     );
 
     forkJoin(pokemonGetter(this.PokemonOneName),pokemonGetter(this.PokemonTwoName)).subscribe(ar => {
+        console.log("ar")
+        console.log(ar)
         const pokeData1 = ar[0];
         this.battleService.PokemonOne = pokeData1.shift() as Pokemon;
         this.battleService.PokemonOne.setAttackList(ar[0]);
+        console.log("this.battleService.PokemonOne")
+        console.log(this.battleService.PokemonOne)
         console.log(this.battleService.PokemonOne.attackList);
 
         const pokeData2 = ar[1];
         this.battleService.PokemonTwo = pokeData2.shift() as Pokemon;
         this.battleService.PokemonTwo.setAttackList(ar[1]);
+      console.log("this.battleService.PokemonTwo");
+      console.log(this.battleService.PokemonTwo);
         console.log(this.battleService.PokemonTwo.attackList);
         //afficher message chargé
     });
@@ -63,15 +83,15 @@ export class BattleManagerComponent implements OnInit {
   }
 
   private dispatch(data: State) {
-    if(data.App == "FightStart") {
+    if(data.App === "FightStart") {
       const p1 = this.battleService.PokemonOne;
       const p2 = this.battleService.PokemonTwo;
       const newState = this.getFirstAttacker(p1, p2);
       this.StateManager.ChangeState(new State("FightOngoing",newState));
     }
-    if(data.App == "FightOngoing") {
-      if(data.Fight == "P1Attack") this.fight(this.battleService.PokemonOne, this.battleService.PokemonTwo);
-      if(data.Fight == "P2Attack") this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
+    if(data.App === "FightOngoing") {
+      if(data.Fight === "P1Attack") this.fight(this.battleService.PokemonOne, this.battleService.PokemonTwo);
+      if(data.Fight === "P2Attack") this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
     }
   }
 

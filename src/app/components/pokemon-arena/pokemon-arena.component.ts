@@ -28,11 +28,17 @@ export class PokemonArenaComponent implements OnInit {
         this.myp = "mypimg";
         this.statemanager.StateClock.subscribe(state => {
             //temporaire
-            var elem = document.getElementById('display');
+            const elem = document.getElementById('display');
             elem.scrollTop = elem.scrollHeight;
+<<<<<<< HEAD
             if(state.Fight == "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken) this.shake(this.battleService.PokemonTwo);
             if(state.Fight == "P2Attack" && this.battleService.PokemonOne.lastDammageTaken) this.shake(this.battleService.PokemonOne);
         })
+=======
+            if(state.Fight === "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken > 0) this.shake(this.battleService.PokemonTwo);
+            if(state.Fight === "P2Attack" && this.battleService.PokemonOne.lastDammageTaken > 0) this.shake(this.battleService.PokemonOne);
+        });
+>>>>>>> 84098df48f436b063211ac01d929fb188fe8fd8e
     }
 
     animate() {

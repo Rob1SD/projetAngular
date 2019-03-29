@@ -39,6 +39,18 @@ export class GameStateService {
     );
   }
 
+<<<<<<< HEAD
+=======
+  //observer wich publish the current state of the game every seconds 
+  private intervalStateFunc = () => interval(1500).pipe(
+    tap(state => console.log(this.CurrentState())),
+    map(() => this.CurrentState())
+  )
+
+  //return the current state 
+  public CurrentState = (): State => this.state;
+
+>>>>>>> 84098df48f436b063211ac01d929fb188fe8fd8e
   //change the current state
   public ChangeState = (state: State) => this.gamestate.next(state);
 }
