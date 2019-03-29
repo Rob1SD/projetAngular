@@ -17,10 +17,6 @@ export class SelectionComponent implements OnInit {
   
   constructor(public poke: PokemonService, public battleService: BattleService) { }
 
-  onPokelement() {
-    
-  }
-
   ngOnInit() {
     const fillAttackList = (data: IPokemon) => {
       const max = data.moves.length;
@@ -63,4 +59,22 @@ export class SelectionComponent implements OnInit {
     });
   }
 
+  onPokelement(pokemon : Pokemon, select : number) {
+    if(select != 1 && select != 2) {
+      throw new Error("Select should be 1 or 2");
+    }
+    
+    if(select == 1) {
+      this.pokeList.forEach(element => {
+        element.selected1 = false;
+      });
+      pokemon.selected1 = true;
+    }
+    else if (select == 2) {
+      this.pokeList.forEach(element => {
+        element.selected2 = false;
+      });
+      pokemon.selected2 = true;
+    }
+  }
 }

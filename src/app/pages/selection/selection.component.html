@@ -3,8 +3,8 @@
 <div id="pokechoice1">
   <h3>Choix pokemon 1</h3>
   <ul id="pokemons_1" class="pokelist">
-    <li class="pokelement" [ngClass]="pokemon.selected ? 'selected': ''" *ngFor="let pokemon of pokeList" (click)="onPokelement()">
-      <span class="image"><img src='{{ pokemon.frontImage }}'></span><br>
+    <li class="pokelement" [ngClass]="pokemon.selected1 ? 'selected': ''" *ngFor="let pokemon of pokeList" (click)="onPokelement(pokemon, 1)">
+      <img src='{{ pokemon.frontImage }}'><br>
       <span class="name">{{ pokemon.nom }}</span>
     </li>
   </ul>
@@ -13,7 +13,7 @@
 <div id="pokechoice2">
   <h3>Choix pokemon 2</h3>
   <ul id="pokemons_2" class="pokelist">
-    <li class="pokelement" [ngClass]="pokemon.selected ? 'selected': ''" *ngFor="let pokemon of pokeList">
+    <li class="pokelement" [ngClass]="pokemon.selected2 ? 'selected': ''" *ngFor="let pokemon of pokeList" (click)="onPokelement(pokemon, 2)">
       <img src='{{ pokemon.frontImage }}'><br>
       {{ pokemon.nom }}
     </li>
