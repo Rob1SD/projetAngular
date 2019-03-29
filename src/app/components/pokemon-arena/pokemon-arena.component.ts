@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../../pokemon.service';
 import { IPokemon } from "../../models/IPokemon";
 import { Pokemon } from "../../models/class_pokemon";
-import { forkJoin, of, Observable } from "rxjs";
+import { forkJoin, of, Observable, Subscription } from "rxjs";
 import { flatMap, map } from 'rxjs/operators';
 import { compileNgModule } from '@angular/core/src/render3/jit/module';
 import { BattleService } from 'src/app/battle.service';
@@ -22,6 +22,7 @@ export class PokemonArenaComponent implements OnInit {
     public myp: string;
     public p1Chosen: Observable<string>;
     public p2Chosen: Observable<string>;
+    private subscription : Subscription;
 
     constructor(public poke: PokemonService, public battleService: BattleService, 
         public statemanager: GameStateService, public activatedRoute: ActivatedRoute) 
@@ -36,13 +37,17 @@ export class PokemonArenaComponent implements OnInit {
     ngOnInit() {
         this.enp = "enpimg";
         this.myp = "mypimg";
-        this.statemanager.StateClock.subscribe(state => {
+        this.subscription = this.statemanager.StateClock.subscribe(state => {
             //temporaire
             const elem = document.getElementById('display');
             elem.scrollTop = elem.scrollHeight;
             if(state.Fight == "P1Attack" && this.battleService.PokemonTwo.lastDammageTaken) this.shake(this.battleService.PokemonTwo);
             if(state.Fight == "P2Attack" && this.battleService.PokemonOne.lastDammageTaken) this.shake(this.battleService.PokemonOne);
-        })
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     animate() {
