@@ -83,15 +83,21 @@ export class BattleManagerComponent implements OnInit {
   }
 
   private dispatch(data: State) {
-    if(data.App === "FightStart") {
+    switch(data.App) {
+      case "FightStart":
       const p1 = this.battleService.PokemonOne;
       const p2 = this.battleService.PokemonTwo;
       const newState = this.getFirstAttacker(p1, p2);
       this.StateManager.ChangeState(new State("FightOngoing",newState));
-    }
-    if(data.App === "FightOngoing") {
+      break;
+
+      case "FightOngoing":
       if(data.Fight === "P1Attack") this.fight(this.battleService.PokemonOne, this.battleService.PokemonTwo);
-      if(data.Fight === "P2Attack") this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
+      else if(data.Fight === "P2Attack") this.fight(this.battleService.PokemonTwo, this.battleService.PokemonOne);
+      break;
+      
+      default:
+      break;
     }
   }
 
